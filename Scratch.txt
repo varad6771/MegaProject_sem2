@@ -1,0 +1,51 @@
+# if __name__ == '__main__':
+#     write_settings('varad', 'vanjape', 'app1','app2','app3')
+#     read_settings()
+# example of how to access the data from file
+# for settings_data_file in input_data['Settings']:
+#     print('Name: ' + settings_data_file['name'])
+#     print('Password: ' + settings_data_file['password'])
+#     print('app1: ' + settings_data_file['app1'])
+#     print('app2: ' + settings_data_file['app2'])
+#     print('app3: ' + settings_data_file['app3'])
+#     print('')
+
+
+# updated
+def read_settings(in_fname):
+    print("in createSettings and in read_settings")
+    
+    
+    with open(in_fname, 'r') as json_file:
+        input_data = json.load(json_file)
+    
+    for settings_data_file in input_data['Settings']:
+        print('Name: ' + settings_data_file['name'])
+        print('Password: ' + settings_data_file['password'])
+        print('app1: ' + settings_data_file['app1'])
+        print('app2: ' + settings_data_file['app2'])
+        print('app3: ' + settings_data_file['app3'])
+        print('')
+
+
+
+# updated
+def file_existence(in_file):
+    #print(in_file)
+    settings_file = Path(in_file)
+    if settings_file.exists():
+        return True
+    
+    return False
+
+
+    import os
+os.remove("ChangedFile.csv")
+
+
+
+
+os.remove() removes a file.
+os.rmdir() removes an empty directory.
+shutil.rmtree() deletes a directory and all its contents.
+

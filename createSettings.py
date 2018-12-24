@@ -1,13 +1,32 @@
 import json
+import os
 from pathlib import Path
+
+
+'''
+    TODO: to take the password in secure form instead of plaintext
+    TODO: also we will need to change this and other functions to create files in specific folder 
+    currently we are considering the folder is same for every body and hence checking settings file in current
+    folder
+'''
+
+#settings_file = Path("settings.json")
+input_name = ""
+input_password = ""
+final_uname = ""
 
 '''
     This function writes the settings in settings.json
     if the file is not there it will create the file and then store function else it will read settings
     @params input_name, input_password, app1, app2, app3
  '''
- # TODO: to take the password in secure form instead of plaintext
-def write_settings(input_name,input_password,app1,app2,app3):
+def write_settings(input_name, input_password, app1, app2, app3):
+    #print("in write_settings func vals of param comin up")
+    #print(input_name)
+    #print(input_password)
+    #print(app1)
+    #print(app2)
+    #print(app3)
 
     data = {}
     data['Settings'] = []
@@ -19,41 +38,51 @@ def write_settings(input_name,input_password,app1,app2,app3):
         'app3': app3,
     })
 
-    '''
-        TODO:
-        first check whether folder is there then check whether file is there
-        check the path depending upon where a folder will be created
-        folder will be used to store some of the important settings and other tidbits
-    '''
+    out_fname = input_name+".json" 
+    # print(out_fname)
+    with open(out_fname, 'w') as outfile:
+        json.dump(data, outfile) 
 
-    settingsFile = Path("settings.json")
-    if settingsFile.is_file():
-        print("File is present") # do some processing
-    else:
-        with open('settings.json', 'w') as outfile:
-            json.dump(data, outfile) # settings written to file
+    return out_fname
 
 
 '''
     This function reads the data from file.
     @return array of settings :- input_data[]
 '''
-def read_settings():
-
-    with open('settings.json') as json_file:
+def read_settings(in_fname):
+    #print("in createSettings and in read_settings")
+    
+    with open(in_fname, 'r') as json_file:
         input_data = json.load(json_file)
-
+    
     return input_data
 
+def set_uname(in_uname):
+    print("in set uname func")
+    final_uname = in_uname 
+    print("value of final_uname  "+final_uname)
 
-# if __name__ == '__main__':
-#     write_settings('varad', 'vanjape', '$HOME/Code/MegaProject_sem2/app1','$HOME/Code/MegaProject_sem2/app2','$HOME/Code/MegaProject_sem2/app3')
-#     read_settings()
-# example of how to access the data from file
-# for settings_data_file in input_data['Settings']:
-#     print('Name: ' + settings_data_file['name'])
-#     print('Password: ' + settings_data_file['password'])
-#     print('app1: ' + settings_data_file['app1'])
-#     print('app2: ' + settings_data_file['app2'])
-#     print('app3: ' + settings_data_file['app3'])
-#     print('')
+def get_uname():
+    print("in get uname func")
+    print("value here is  "+final_uname)
+    return final_uname
+
+def file_existence(in_fname):
+    #print(in_file)
+    settings_file = Path(in_fname)
+    if settings_file.exists():
+        return True
+    
+    return False
+
+def file_reset(in_fname):
+    print("in file reset func")
+    print("name received is  "+in_fname)
+    os.remove(in_fname)
+    if file_existence(in_fname):
+        return True
+    
+    return False
+
+
