@@ -11,7 +11,7 @@
 #     print('')
 
 
-# updated
+# updated on 12-24-2018
 def read_settings(in_fname):
     print("in createSettings and in read_settings")
     
@@ -29,7 +29,7 @@ def read_settings(in_fname):
 
 
 
-# updated
+# updated on 12-24-2018
 def file_existence(in_file):
     #print(in_file)
     settings_file = Path(in_file)
@@ -38,14 +38,14 @@ def file_existence(in_file):
     
     return False
 
-
-    import os
-os.remove("ChangedFile.csv")
-
-
-
-
 os.remove() removes a file.
 os.rmdir() removes an empty directory.
 shutil.rmtree() deletes a directory and all its contents.
 
+
+
+# referred for switching between windows
+https://developer.gnome.org/gtk3/stable/GtkWindow.html
+https://developer.gnome.org/gtk3/stable/GtkApplication.html#gtk-application-get-window-by-id
+https://www.bachsau.com/2015/07/13/how-to-use-gtk-3-in-python-to-manage-your-whole-application/
+https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html#example

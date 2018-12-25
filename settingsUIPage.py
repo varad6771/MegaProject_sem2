@@ -10,7 +10,6 @@ class settingsPage(Gtk.Window):
     def gtk_main_quit(self, widget, data=None):
         Gtk.main_quit()
 
-
     def save_func(self, widget, data=None):
         print("in save_func")
 
@@ -33,7 +32,7 @@ class settingsPage(Gtk.Window):
     def __init__(self):
         builder = Gtk.Builder()
         builder.add_from_file("SettingsForm1.glade")
-        self.window = builder.get_object("window2")
+        self.window = builder.get_object("window3")
         self.entry_app1 = builder.get_object("entry_app1")
         self.entry_app2 = builder.get_object("entry_app2")
         self.entry_app3 = builder.get_object("entry_app3")

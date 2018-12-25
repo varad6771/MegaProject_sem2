@@ -13,7 +13,6 @@ from pathlib import Path
 #settings_file = Path("settings.json")
 input_name = ""
 input_password = ""
-final_uname = ""
 
 '''
     This function writes the settings in settings.json
@@ -58,16 +57,6 @@ def read_settings(in_fname):
     
     return input_data
 
-def set_uname(in_uname):
-    print("in set uname func")
-    final_uname = in_uname 
-    print("value of final_uname  "+final_uname)
-
-def get_uname():
-    print("in get uname func")
-    print("value here is  "+final_uname)
-    return final_uname
-
 def file_existence(in_fname):
     #print(in_file)
     settings_file = Path(in_fname)
@@ -77,12 +66,14 @@ def file_existence(in_fname):
     return False
 
 def file_reset(in_fname):
-    print("in file reset func")
-    print("name received is  "+in_fname)
+    #print("in file reset func in createSettings")
+    #print("name received is  "+in_fname)
     os.remove(in_fname)
     if file_existence(in_fname):
-        return True
+       # print("file deleted")
+        return False
     
-    return False
+    #print("file exist")
+    return True
 
 
