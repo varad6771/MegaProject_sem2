@@ -10,7 +10,6 @@ from pathlib import Path
     folder
 '''
 
-#settings_file = Path("settings.json")
 input_name = ""
 input_password = ""
 
