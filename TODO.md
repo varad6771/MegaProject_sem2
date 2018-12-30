@@ -1,11 +1,9 @@
 ## Remaining Tasks
 - ### UI
-    - Make code more redable
-    - Make code more cogent
-    - Recheck all the functions and corner cases
-    - Make code more modular (If possible)
-    - Recheck all the var assignments and their passing
     - Encrypt and decrypt val of password before writing to file
+    - [Done] Make code more cogent
+    - [Done] Recheck all the functions and corner cases
+    - [Done] Make code more modular (If possible)
 
 - ### Main Application
     - static model implementation
@@ -13,6 +11,8 @@
 
 ## Partially Done
 - ### UI
+    - Make code more redable
+    - Recheck all the var assignments and their passing
     - loginScreen, settingsScreen, dashboard 
     - User Register and Auth using json file
 
