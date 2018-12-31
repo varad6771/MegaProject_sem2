@@ -16,11 +16,10 @@ class loginPage(Gtk.Window):
         global input_uname
         global input_pwd
         global in_file
-
+        
+        key = b'\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18'
         input_uname = self.entry_uname.get_text()
         input_pwd  = self.entry_pwd.get_text()
-        #print(input_uname)
-        #print(input_pwd)
 
         in_file = input_uname+".json"   
 
@@ -38,7 +37,11 @@ class loginPage(Gtk.Window):
         else:
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
-                if data_file['name'] == input_uname and data_file['password'] == input_pwd :
+
+                red_pwd = cs.decrypt(data_file['password'],key)
+                print("in login func red_pwd  "+red_pwd)
+                red_unm = data_file['name'] 
+                if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd,input_pwd) == True:
                     print("login success")
                     self.window2.show_all()
                     self.title_label.set_text("Welcome  "+input_uname)
@@ -64,15 +67,16 @@ class loginPage(Gtk.Window):
         print("in register_func")
         uname_val = self.entry_uname.get_text()
         pwd_val  = self.entry_pwd.get_text() 
-        print(uname_val)
-        print(pwd_val)
-
+        key = b'\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18'
         in_file = uname_val+".json"
+
+        ciphertext_input = cs.encrypt(pwd_val,key)
+        new_ct = ciphertext_input.decode('utf-8')
+        
         if cs.file_existence(in_file) == False:
             print("file does not exist so write settings")
-            created_settings_file = cs.write_settings(uname_val, pwd_val, "abc", "abc", "abc")    
+            created_settings_file = cs.write_settings(uname_val, new_ct, "abc", "abc", "abc")    
             print("register successful file created  "+created_settings_file)
-            print(" please add the app prefs in settings")
             self.dialog = Gtk.MessageDialog(Gtk.Window(), 
                                    Gtk.DialogFlags.MODAL,
                                    Gtk.MessageType.INFO,
@@ -188,29 +192,36 @@ class loginPage(Gtk.Window):
         self.window1 = builder.get_object("window1")
         self.window1.show_all()
         self.window1.connect("destroy", Gtk.main_quit)
-        self.entry_uname = builder.get_object("entry_uname")
-        self.entry_pwd = builder.get_object("entry_pwd")
         builder.connect_signals(self)
 
         # Settings Page
         builder1 = Gtk.Builder()
         builder1.add_from_file("SettingsForm1.glade")
         self.window3 = builder1.get_object("window3")
+        self.window3.connect("destroy", Gtk.main_quit)
+        builder1.connect_signals(self)
+
+        # Dashboard Page
+        builder2 = Gtk.Builder()
+        builder2.add_from_file("DashboardForm1.glade")
+        self.window2 = builder2.get_object("window2")
+        self.window2.connect("destroy", Gtk.main_quit)
+        builder2.connect_signals(self)
+
+
+
+        # Dashboard Page imports
+        self.title_label = builder2.get_object("label_title")
+        # Settings Page imports
         self.entry_app1 = builder1.get_object("entry_app1")
         self.entry_app2 = builder1.get_object("entry_app2")
         self.entry_app3 = builder1.get_object("entry_app3")
         self.entry_pwd_s = builder1.get_object("entry_pwd_s")
         self.uname_label = builder1.get_object("label_uname")
-        builder1.connect_signals(self)
-        self.window3.connect("destroy", Gtk.main_quit)
+        # Login Page imports
+        self.entry_uname = builder.get_object("entry_uname")
+        self.entry_pwd = builder.get_object("entry_pwd")
         
-        # Dashboard Page
-        builder2 = Gtk.Builder()
-        builder2.add_from_file("DashboardForm1.glade")
-        self.window2 = builder2.get_object("window2")
-        self.title_label = builder2.get_object("label_title")
-        builder2.connect_signals(self)
-        self.window2.connect("destroy", Gtk.main_quit)
 
 
 lp_win = loginPage()
