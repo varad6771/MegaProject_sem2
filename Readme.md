@@ -5,7 +5,7 @@ This is the repository for mega project.
 - Dynamic motion capture.
 - select algorithm for image analysis.
 - create a better dataset.
-- create UI for application.
+- [Done]create UI for application.
 - Flawless Documentation 
 
 ### Guid Lines
