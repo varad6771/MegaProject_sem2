@@ -17,7 +17,6 @@ class loginPage(Gtk.Window):
         global input_pwd
         global in_file
         
-        key = b'\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18'
         input_uname = self.entry_uname.get_text()
         input_pwd  = self.entry_pwd.get_text()
 
@@ -38,10 +37,9 @@ class loginPage(Gtk.Window):
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
 
-                red_pwd = cs.decrypt(data_file['password'],key)
-                print("in login func red_pwd  "+red_pwd)
+                red_pwd = data_file['password']
                 red_unm = data_file['name'] 
-                if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd,input_pwd) == True:
+                if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd, input_pwd) == True:
                     print("login success")
                     self.window2.show_all()
                     self.title_label.set_text("Welcome  "+input_uname)
@@ -67,26 +65,32 @@ class loginPage(Gtk.Window):
         print("in register_func")
         uname_val = self.entry_uname.get_text()
         pwd_val  = self.entry_pwd.get_text() 
-        key = b'\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18'
         in_file = uname_val+".json"
 
-        ciphertext_input = cs.encrypt(pwd_val,key)
-        new_ct = ciphertext_input.decode('utf-8')
+        ciphertext_input = cs.encrypt(pwd_val)
         
         if cs.file_existence(in_file) == False:
             print("file does not exist so write settings")
-            created_settings_file = cs.write_settings(uname_val, new_ct, "abc", "abc", "abc")    
-            print("register successful file created  "+created_settings_file)
-            self.dialog = Gtk.MessageDialog(Gtk.Window(), 
-                                   Gtk.DialogFlags.MODAL,
-                                   Gtk.MessageType.INFO,
-                                   Gtk.ButtonsType.OK,
-                                   "New User is Registered!! Please set app preferences in settings")
-            self.dialog.run()
-            self.dialog.destroy()
-
-            uname_val = self.entry_uname.set_text("")
-            pwd_val  = self.entry_pwd.set_text("")
+            if cs.checkEmpty(uname_val) == False and cs.checkEmpty(pwd_val) == False:
+                created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc")    
+                print("register successful file created  "+created_settings_file)
+                self.dialog = Gtk.MessageDialog(Gtk.Window(), 
+                                       Gtk.DialogFlags.MODAL,
+                                       Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK,
+                                       "New User is Registered!! Please set app preferences in settings")
+                self.dialog.run()
+                self.dialog.destroy()
+                uname_val = self.entry_uname.set_text("")
+                pwd_val  = self.entry_pwd.set_text("")
+            else:
+                self.dialog = Gtk.MessageDialog(Gtk.Window(), 
+                                       Gtk.DialogFlags.MODAL,
+                                       Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK,
+                                       "Credential cannot be empty!! Please fill all the fields")
+                self.dialog.run()
+                self.dialog.destroy()
         else:
             input_data = cs.read_settings(in_file)
             for settings_data_file in input_data['Settings']:  
@@ -103,18 +107,30 @@ class loginPage(Gtk.Window):
 
     def save_func(self, widget, data=None):
         print("in save_func")
-        print("input uname after login "+input_uname)
         val1 = self.entry_app1.get_text()
         val2 = self.entry_app2.get_text()
         val3 = self.entry_app3.get_text()
         val4 = self.entry_pwd_s.get_text()
 
-        if val4 == "":
+        if cs.checkEmpty(val4) == True:
             val4 = input_pwd
         else:
             val4 = self.entry_pwd_s.get_text()
 
-        created_settings_file = cs.write_settings(input_uname, val4, val1, val2, val3)
+        if cs.checkEmpty(val1) == False and cs.checkEmpty(val2) == False and cs.checkEmpty(val3) == False:
+            ciphertext_input = cs.encrypt(val4)
+            created_settings_file = cs.write_settings(input_uname, ciphertext_input, val1, val2, val3)
+        else:
+            self.dialog = Gtk.MessageDialog(Gtk.Window(), 
+                                   Gtk.DialogFlags.MODAL,
+                                   Gtk.MessageType.INFO,
+                                   Gtk.ButtonsType.OK,
+                                   "Fields cannot be empty!! Please fill all the fields")
+            self.dialog.run()
+            self.dialog.destroy()
+            
+
+
         if cs.file_existence(created_settings_file) == True:
             print("settings saved file name   "+created_settings_file)
             self.dialog = Gtk.MessageDialog(Gtk.Window(), 
