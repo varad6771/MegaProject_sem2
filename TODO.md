@@ -1,6 +1,6 @@
 ## Remaining Tasks
 - ### UI
-    - Encrypt and decrypt val of password before writing to file
+    - [Done] Encrypt and decrypt val of password before writing to file
     - [Done] Make code more cogent
     - [Done] Recheck all the functions and corner cases
     - [Done] Make code more modular (If possible)
