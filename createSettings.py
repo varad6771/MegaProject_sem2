@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 
 import json
 import os
+import os.path
 import base64
 import hashlib
 
@@ -55,8 +56,7 @@ def file_existence(in_fname):
         :param in_fname: 
         @return boolean:
     """
-    settings_file = Path(in_fname)
-    if settings_file.exists():
+    if os.path.isfile(in_fname):
         return True
     
     return False
