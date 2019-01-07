@@ -19,3 +19,4 @@
 ## Issues
 - ### UI
     - if a user wants to save settings for app pref's, he has to select/reselect all else there will be error even if he wants to change only one pref
+
