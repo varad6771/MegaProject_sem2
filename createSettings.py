@@ -1,4 +1,3 @@
-from pathlib import Path
 from passlib.context import CryptContext
 
 import json

@@ -50,3 +50,24 @@ https://developer.gnome.org/gtk3/stable/GtkApplication.html#gtk-application-get-
 https://www.bachsau.com/2015/07/13/how-to-use-gtk-3-in-python-to-manage-your-whole-application/
 https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html#example
 -------------------------------------------------------------------------------------------------------------------------
+OutputBox.insert(END, "Example text")
+
+
+
+
+
+http://effbot.org/tkinterbook/text.htm#patterns
+
+
+
+
+'''
+	    #Text Box for username
+        uname_sign=StringVar()
+        e = Entry(sign,textvariable=uname_sign,width=15,bg="lightgreen").place(x=330,y=110)
+
+        plabel =
+
+        upass_sign=StringVar()
+        e=Entry(sign,show="*",textvariable=upass_sign,width=15,bg="lightgreen").place(x=330,y=160)
+        '''
