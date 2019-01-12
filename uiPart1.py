@@ -3,12 +3,10 @@ from tkinter import messagebox
 from tkinter import font  as tkfont
 import createSettings as cs
 
-
+# TODO: whereever uname is needed even for creating in_file we need to get uname 
+#       i guess from cs as get Uname but it will mean read file each time of set var there once login successful
 class LoginForm(tk.Frame):
 
-    
-    
-    
     def login_func(self):
         # print("Clicked")
         input_uname = self.entry_username.get()
@@ -37,7 +35,6 @@ class LoginForm(tk.Frame):
                     input_uname = self.entry_username.delete(0, END)
                     input_pwd  = self.entry_password.delete(0, END)
 
-    
     def register_func(self):
         print("in register_func")
         uname_val = self.entry_username.get()
@@ -64,7 +61,9 @@ class LoginForm(tk.Frame):
                     messagebox.showerror("Error","User Already Exists!! You cannot Re-Register")
                     break
 
-    
+    def clear_func(self):
+        print("in clear func")
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -82,47 +81,109 @@ class LoginForm(tk.Frame):
 
 
         loginbtn = tk.Button(self, text="Login", command=self.login_func)
-        loginbtn.grid(columnspan=2)
+        loginbtn.grid(row=2,column=0)
 
         registerbtn = tk.Button(self, text="Register", command=self.register_func)
-        registerbtn.grid(columnspan=2)
+        registerbtn.grid(row=2,column=1)
+
+        clearbtn = tk.Button(self, text="Clear", command=self.clear_func)
+        clearbtn.grid(row=2,column=2)
 
         self.pack()
 
 class DashboardForm(tk.Frame):
 
+    def runapp_func(self):
+        print("In the run app func")
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-        runappbtn = tk.Button(self, text="Login", command=self.login_func)
-        loginbtn.grid(columnspan=2)
+        runappbtn = tk.Button(self, text="Run app", command=self.runapp_func)
+        runappbtn.grid(row=1,column=0)
 
-        registerbtn = tk.Button(self, text="Register", command=self.register_func)
-        registerbtn.grid(columnspan=2)
+        settingsbtn = tk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
+        settingsbtn.grid(row=1,column=1)
         
-        label = tk.Label(self, text="This is page 1", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("LoginForm"))
-        button.pack()
-
-
 class SettingsForm(tk.Frame):
 
+    def save_func(self):
+        print("in save_func")
+        
+    def reset_func(self):
+        print("in reset_func")
+        print("input uname after login "+input_uname)
+        #val1 = self.entry_app1.set_text("")
+        #val2 = self.entry_app2.set_text("")
+        #val3 = self.entry_app3.set_text("")
+        #val4 = self.entry_password_settingsui.set_text("")
+        
+        reset_file_name = input_uname+".json"
+        print("reset file name "+reset_file_name)
+        
+        if  cs.file_reset(reset_file_name) == True:
+            messagebox.showinfo("Succesful Reset", "Settings Reset Success!! Please enter new settings")
+        else:
+            messagebox.showerror("Reset Fail", "Settings Reset Failed")
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is page 2", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("LoginForm"))
-        button.pack()
+        
+
+        self.label_app1 = tk.Label(self, text="Application 1")
+        self.label_app2 = tk.Label(self, text="Application 2")
+        self.label_app3 = tk.Label(self, text="Application 3")
+        self.label_app4 = tk.Label(self, text="Application 4")
+        self.label_app5 = tk.Label(self, text="Application 5")
+        self.label_uname = tk.Label(self, text="Uname")
+        self.label_uname_display = tk.Label(self, text="need a var with unmae here")
+        self.label_password_settingsui = tk.Label(self, text="Password")
 
 
 
+        self.entry_app1 = tk.Entry(self)
+        self.entry_app2 = tk.Entry(self)
+        self.entry_app3 = tk.Entry(self)
+        self.entry_app4 = tk.Entry(self)
+        self.entry_app5 = tk.Entry(self)
+        self.entry_password_settingsui = tk.Entry(self, show="*")
 
-class SampleApp(tk.Tk):
+
+
+        self.label_app1.grid(row=0)
+        self.label_app2.grid(row=1)
+        self.label_app3.grid(row=2)
+        self.label_app4.grid(row=3)
+        self.label_app5.grid(row=4) 
+        self.label_uname.grid(row=5)       
+        self.label_uname_display.grid(row=5,column=1)
+        self.label_password_settingsui.grid(row=6)
+
+        self.entry_app1.grid(row=0, column=1)
+        self.entry_app2.grid(row=1, column=1)
+        self.entry_app3.grid(row=2, column=1)
+        self.entry_app4.grid(row=3, column=1)
+        self.entry_app5.grid(row=4, column=1)
+        self.entry_password_settingsui.grid(row=6, column=1)
+
+        resetbtn = tk.Button(self, text="Reset", command=self.reset_func)
+        resetbtn.grid(row=7,column=0)
+
+        savebtn = tk.Button(self, text="Save", command=self.save_func)
+        savebtn.grid(row=7,column=1)
+
+        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
+        backbtn.grid(row=7,column=2)
+        
+        #label = tk.Label(self, text="This is Settings Page", font=controller.title_font)
+        #label.pack(side="top", fill="x", pady=10)
+        #button = tk.Button(self, text="Go to the start page",
+        #                   command=lambda: controller.show_frame("LoginForm"))
+        #button.pack()
+
+class StartApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -156,5 +217,5 @@ class SampleApp(tk.Tk):
         frame.tkraise()
 
 if __name__ == "__main__":
-    app = SampleApp()
+    app = StartApp()
     app.mainloop()
