@@ -1,10 +1,10 @@
 import tkinter as tk  
 from tkinter import messagebox
+from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
 
-# TODO: whereever uname is needed even for creating in_file we need to get uname 
-#       i guess from cs as get Uname but it will mean read file each time of set var there once login successful
+# TODO: to set fname to selected entry in save_func, set label above paswd in SettingsForm
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -29,6 +29,7 @@ class LoginForm(tk.Frame):
                 if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd, input_pwd) == True:
                     print("login success")
                     self.controller.show_frame("DashboardForm")
+                    cs.set_uname(input_uname)
                     print("on DashboardForm1")
                 else:
                     messagebox.showerror("Login error", "Incorrect Credentials")
@@ -108,21 +109,64 @@ class DashboardForm(tk.Frame):
         
 class SettingsForm(tk.Frame):
 
+    def sel_app1_func(self):
+        global entry_app_var1
+        entry_app_var1 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+
+    def sel_app2_func(self):
+        global entry_app_var2
+        entry_app_var2 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+
+    def sel_app3_func(self):
+        global entry_app_var3
+        entry_app_var3 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+    
+    def sel_app4_func(self):
+        global entry_app_var4
+        entry_app_var4 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+    
+    def sel_app5_func(self):
+        global entry_app_var5
+        entry_app_var5 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+
     def save_func(self):
         print("in save_func")
-        
+        global entry_passwd_var6
+        entry_passwd_var6 = self.entry_password_settingsui.get()
+
+        input_uname = cs.get_uname()
+        input_pwd = cs.get_pwd()
+
+        if cs.checkEmpty(entry_passwd_var6) == True:
+            entry_passwd_var6 = input_pwd
+        else:
+            entry_passwd_var6 = self.entry_password_settingsui.get()
+
+        if cs.checkEmpty(entry_app_var1) == False and cs.checkEmpty(entry_app_var2) == False and cs.checkEmpty(entry_app_var3) == False and cs.checkEmpty(entry_app_var4) == False and cs.checkEmpty(entry_app_var5) == False:
+            ciphertext_input = cs.encrypt(entry_passwd_var6)
+            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
+        else:
+            messagebox.showerror("Empty Fields","Please fill all the fields")
+
+
+        if cs.file_existence(created_settings_file) == True:
+            print("settings saved file name   "+created_settings_file)
+            messagebox.showinfo("Save Succesful","New Settings are Updated Successfully ")
+        else:
+            messagebox.showerror("Update Failed","New Settings are not Updated!! Please try again later")
+
     def reset_func(self):
         print("in reset_func")
-        print("input uname after login "+input_uname)
         #val1 = self.entry_app1.set_text("")
         #val2 = self.entry_app2.set_text("")
         #val3 = self.entry_app3.set_text("")
-        #val4 = self.entry_password_settingsui.set_text("")
+        #entry_passwd_var6 = self.entry_password_settingsui.set_text("")
         
-        reset_file_name = input_uname+".json"
-        print("reset file name "+reset_file_name)
+        input_uname = cs.get_uname()
+        in_file = input_uname+".json"
+        print("reset file name "+in_file)
         
-        if  cs.file_reset(reset_file_name) == True:
+        if  cs.file_reset(in_file) == True:
             messagebox.showinfo("Succesful Reset", "Settings Reset Success!! Please enter new settings")
         else:
             messagebox.showerror("Reset Fail", "Settings Reset Failed")
@@ -176,6 +220,18 @@ class SettingsForm(tk.Frame):
 
         backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
         backbtn.grid(row=7,column=2)
+
+        sel_app1btn = tk.Button(self, text="Select", command=self.sel_app1_func)
+        sel_app1btn.grid(row=0,column=2)
+        sel_app2btn = tk.Button(self, text="Select", command=self.sel_app2_func)
+        sel_app2btn.grid(row=1,column=2)
+        sel_app3btn = tk.Button(self, text="Select", command=self.sel_app3_func)
+        sel_app3btn.grid(row=2,column=2)
+        sel_app4tn = tk.Button(self, text="Select", command=self.sel_app4_func)
+        sel_app4tn.grid(row=3,column=2)
+        sel_app5tn = tk.Button(self, text="Select", command=self.sel_app5_func)
+        sel_app5tn.grid(row=4,column=2)
+
         
         #label = tk.Label(self, text="This is Settings Page", font=controller.title_font)
         #label.pack(side="top", fill="x", pady=10)

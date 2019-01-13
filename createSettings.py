@@ -121,3 +121,17 @@ def checkEmpty(field_val):
         return True
     
     return False
+
+def set_uname(input_uname):
+    global uname
+    uname = input_uname
+
+def set_pwd(input_pwd):
+    global pwd
+    pwd = input_pwd
+
+def get_pwd():
+    return pwd
+
+def get_uname():
+    return uname
