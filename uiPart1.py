@@ -18,8 +18,8 @@ class LoginForm(tk.Frame):
         if cs.file_existence(in_file) == False:
             print("file does not exist so login fail")
             messagebox.showerror("Login Fail", "User does not Exist")
-            input_uname = self.entry_username.delete(0, END)
-            input_pwd  = self.entry_password.delete(0, END)
+            self.entry_username.delete(0, tk.END)
+            self.entry_password.delete(0, tk.END)
         else:
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
@@ -33,8 +33,8 @@ class LoginForm(tk.Frame):
                     print("on DashboardForm1")
                 else:
                     messagebox.showerror("Login error", "Incorrect Credentials")
-                    input_uname = self.entry_username.delete(0, END)
-                    input_pwd  = self.entry_password.delete(0, END)
+                    input_uname = self.entry_username.delete(0, tk.END)
+                    input_pwd  = self.entry_password.delete(0, tk.END)
 
     def register_func(self):
         print("in register_func")
@@ -50,8 +50,9 @@ class LoginForm(tk.Frame):
                 created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc", "abc")
                 print("register successful file created  "+created_settings_file)
                 messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
-                uname_val = self.entry_username.delete(0, END)
-                pwd_val  = self.entry_password.delete(0, END)
+                self.entry_username.delete(0, tk.END)
+                self.entry_password.delete(0, tk.END)
+                
             else:
                 messagebox.showerror("Empty Credentials","Credential cannot be empty!! Please fill all the fields")
         else:
@@ -64,7 +65,9 @@ class LoginForm(tk.Frame):
 
     def clear_func(self):
         print("in clear func")
-
+        self.entry_username.delete(0, tk.END)
+        self.entry_password.delete(0, tk.END)
+        
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -163,10 +166,12 @@ class SettingsForm(tk.Frame):
 
     def reset_func(self):
         print("in reset_func")
-        #val1 = self.entry_app1.set_text("")
-        #val2 = self.entry_app2.set_text("")
-        #val3 = self.entry_app3.set_text("")
-        #entry_passwd_var6 = self.entry_password_settingsui.set_text("")
+        self.entry_app1.delete(0, tk.END)
+        self.entry_app2.delete(0, tk.END)
+        self.entry_app3.delete(0, tk.END)
+        self.entry_app4.delete(0, tk.END)
+        self.entry_app5.delete(0, tk.END)
+        self.entry_password_settingsui.delete(0, tk.END)
         
         input_uname = cs.get_uname()
         in_file = input_uname+".json"
@@ -181,18 +186,15 @@ class SettingsForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-        val_uname = cs.get_uname()
-        print("val_uname "+val_uname)
         self.label_app1 = tk.Label(self, text="Application 1")
         self.label_app2 = tk.Label(self, text="Application 2")
         self.label_app3 = tk.Label(self, text="Application 3")
         self.label_app4 = tk.Label(self, text="Application 4")
         self.label_app5 = tk.Label(self, text="Application 5")
         self.label_uname = tk.Label(self, text="Uname")
-        self.label_uname_display = tk.Label(self, textvariable=val_uname)
+        self.label_uname_display = tk.Label(self, text="val_uname")
         self.label_password_settingsui = tk.Label(self, text="Password")
 
-        
         self.entry_app1 = tk.Entry(self)
         self.entry_app2 = tk.Entry(self)
         self.entry_app3 = tk.Entry(self)
@@ -238,13 +240,6 @@ class SettingsForm(tk.Frame):
         sel_app5tn = tk.Button(self, text="Select", command=self.sel_app5_func)
         sel_app5tn.grid(row=4,column=2)
 
-        
-        #label = tk.Label(self, text="This is Settings Page", font=controller.title_font)
-        #label.pack(side="top", fill="x", pady=10)
-        #button = tk.Button(self, text="Go to the start page",
-        #                   command=lambda: controller.show_frame("LoginForm"))
-        #button.pack()
-
 class StartApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -274,7 +269,6 @@ class StartApp(tk.Tk):
         self.show_frame("LoginForm")
 
     def show_frame(self, page_name):
-        '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
 
