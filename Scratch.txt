@@ -11,32 +11,6 @@
 #     print('')
 
 
-# updated on 12-24-2018
-def read_settings(in_fname):
-    print("in createSettings and in read_settings")
-    
-    
-    with open(in_fname, 'r') as json_file:
-        input_data = json.load(json_file)
-    
-    for settings_data_file in input_data['Settings']:
-        print('Name: ' + settings_data_file['name'])
-        print('Password: ' + settings_data_file['password'])
-        print('app1: ' + settings_data_file['app1'])
-        print('app2: ' + settings_data_file['app2'])
-        print('app3: ' + settings_data_file['app3'])
-        print('')
-
-
-
-# updated on 12-24-2018
-def file_existence(in_file):
-    #print(in_file)
-    settings_file = Path(in_file)
-    if settings_file.exists():
-        return True
-    
-    return False
 
 os.remove() removes a file.
 os.rmdir() removes an empty directory.

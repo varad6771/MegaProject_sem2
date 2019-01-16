@@ -4,7 +4,7 @@ from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
 
-# TODO: to set fname to selected entry in save_func, set label above paswd in SettingsForm
+# TODO: to set val of set settings in SettingsForm entry and labels
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -112,22 +112,27 @@ class SettingsForm(tk.Frame):
     def sel_app1_func(self):
         global entry_app_var1
         entry_app_var1 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        self.entry_app1.insert(0, entry_app_var1)
 
     def sel_app2_func(self):
         global entry_app_var2
         entry_app_var2 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        self.entry_app2.insert(0,entry_app_var2)
 
     def sel_app3_func(self):
         global entry_app_var3
         entry_app_var3 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        self.entry_app3.insert(0,entry_app_var3)
     
     def sel_app4_func(self):
         global entry_app_var4
         entry_app_var4 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        self.entry_app4.insert(0,entry_app_var4)
     
     def sel_app5_func(self):
         global entry_app_var5
         entry_app_var5 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        self.entry_app5.insert(0,entry_app_var5)
 
     def save_func(self):
         print("in save_func")
@@ -136,6 +141,7 @@ class SettingsForm(tk.Frame):
 
         input_uname = cs.get_uname()
         input_pwd = cs.get_pwd()
+
 
         if cs.checkEmpty(entry_passwd_var6) == True:
             entry_passwd_var6 = input_pwd
@@ -175,18 +181,18 @@ class SettingsForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-
+        val_uname = cs.get_uname()
+        print("val_uname "+val_uname)
         self.label_app1 = tk.Label(self, text="Application 1")
         self.label_app2 = tk.Label(self, text="Application 2")
         self.label_app3 = tk.Label(self, text="Application 3")
         self.label_app4 = tk.Label(self, text="Application 4")
         self.label_app5 = tk.Label(self, text="Application 5")
         self.label_uname = tk.Label(self, text="Uname")
-        self.label_uname_display = tk.Label(self, text="need a var with unmae here")
+        self.label_uname_display = tk.Label(self, textvariable=val_uname)
         self.label_password_settingsui = tk.Label(self, text="Password")
 
-
-
+        
         self.entry_app1 = tk.Entry(self)
         self.entry_app2 = tk.Entry(self)
         self.entry_app3 = tk.Entry(self)
