@@ -1,4 +1,3 @@
-from pathlib import Path
 from passlib.context import CryptContext
 
 import json
@@ -7,7 +6,8 @@ import os.path
 import base64
 import hashlib
 
-
+uname = ""
+pwd = ""
 def write_settings(input_name, input_password, app1, app2, app3, app4, app5):
     """
     writes settings to file in json format
@@ -122,3 +122,19 @@ def checkEmpty(field_val):
         return True
     
     return False
+
+def set_uname(input_uname):
+    global uname
+    uname = input_uname
+
+def set_pwd(input_pwd):
+    global pwd
+    pwd = input_pwd
+
+def get_pwd():
+    print(pwd)
+    return pwd
+
+def get_uname():
+    print(uname)
+    return uname

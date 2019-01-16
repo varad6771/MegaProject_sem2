@@ -11,32 +11,6 @@
 #     print('')
 
 
-# updated on 12-24-2018
-def read_settings(in_fname):
-    print("in createSettings and in read_settings")
-    
-    
-    with open(in_fname, 'r') as json_file:
-        input_data = json.load(json_file)
-    
-    for settings_data_file in input_data['Settings']:
-        print('Name: ' + settings_data_file['name'])
-        print('Password: ' + settings_data_file['password'])
-        print('app1: ' + settings_data_file['app1'])
-        print('app2: ' + settings_data_file['app2'])
-        print('app3: ' + settings_data_file['app3'])
-        print('')
-
-
-
-# updated on 12-24-2018
-def file_existence(in_file):
-    #print(in_file)
-    settings_file = Path(in_file)
-    if settings_file.exists():
-        return True
-    
-    return False
 
 os.remove() removes a file.
 os.rmdir() removes an empty directory.
@@ -50,3 +24,98 @@ https://developer.gnome.org/gtk3/stable/GtkApplication.html#gtk-application-get-
 https://www.bachsau.com/2015/07/13/how-to-use-gtk-3-in-python-to-manage-your-whole-application/
 https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html#example
 -------------------------------------------------------------------------------------------------------------------------
+OutputBox.insert(END, "Example text")
+
+
+https://code.i-harness.com/en/q/7324c2
+https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
+
+
+http://effbot.org/tkinterbook/text.htm#patterns
+
+
+
+
+'''
+	    #Text Box for username
+        uname_sign=StringVar()
+        e = Entry(sign,textvariable=uname_sign,width=15,bg="lightgreen").place(x=330,y=110)
+
+        plabel =
+
+        upass_sign=StringVar()
+        e=Entry(sign,show="*",textvariable=upass_sign,width=15,bg="lightgreen").place(x=330,y=160)
+        '''
+
+
+
+
+          def login_func(self):
+        # print("Clicked")
+        input_uname = self.entry_username.get()
+        input_pwd = self.entry_password.get()
+
+
+        in_file = input_uname+".json"
+
+        if cs.file_existence(in_file) == False:
+            print("file does not exist so login fail")
+            messagebox.showerror("Login Fail", "User does not Exist")
+            input_uname = self.entry_username.delete(0, END)
+            input_pwd  = self.entry_password.delete(0, END)
+        else:
+            input_data = cs.read_settings(in_file)
+            for data_file in input_data['Settings']:
+
+                red_pwd = data_file['password']
+                red_unm = data_file['name']
+                if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd, input_pwd) == True:
+                    print("login success")
+                    # TODO go to dashboard page and hide this one
+                    print("on DashboardForm1")
+                else:
+                    messagebox.showerror("Login error", "Incorrect Credentials")
+                    input_uname = self.entry_username.delete(0, END)
+                    input_pwd  = self.entry_password.delete(0, END)
+
+    
+    def register_func(self):
+        print("in register_func")
+        uname_val = self.entry_username.get()
+        pwd_val  = self.entry_password.get()
+        in_file = uname_val+".json"
+
+        ciphertext_input = cs.encrypt(pwd_val)
+
+        if cs.file_existence(in_file) == False:
+            print("file does not exist so write settings")
+            if cs.checkEmpty(uname_val) == False and cs.checkEmpty(pwd_val) == False:
+                created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc", "abc")
+                print("register successful file created  "+created_settings_file)
+                messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
+                uname_val = self.entry_username.delete(0, END)
+                pwd_val  = self.entry_password.delete(0, END)
+            else:
+                messagebox.showerror("Empty Credentials","Credential cannot be empty!! Please fill all the fields")
+        else:
+            input_data = cs.read_settings(in_file)
+            for settings_data_file in input_data['Settings']:
+                if settings_data_file['name'] == uname_val:
+                    print("data exist! you cannot re-register")
+                    messagebox.showerror("Error","User Already Exists!! You cannot Re-Register")
+                    break
+
+
+
+
+
+
+
+
+
+
+
+root = Tk()
+lf = LoginFrame(root)
+root.mainloop()
+
