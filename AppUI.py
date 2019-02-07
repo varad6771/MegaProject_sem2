@@ -144,13 +144,18 @@ class SettingsForm(tk.Frame):
 
         input_uname = cs.get_uname()
         input_pwd = cs.get_pwd()
-
+        print (input_pwd)
 
         if cs.checkEmpty(entry_passwd_var6) == True:
             entry_passwd_var6 = input_pwd
+            print("in checkEmpty")
+            print(entry_passwd_var6)
         else:
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
+
+        #BUG if these fields are emty at the time of saving i.e user has not selected the in that session
+        # it gives error so it is modified to this Please check last commit with tag full working
         if cs.checkEmpty(entry_app_var1) == False and cs.checkEmpty(entry_app_var2) == False and cs.checkEmpty(entry_app_var3) == False and cs.checkEmpty(entry_app_var4) == False and cs.checkEmpty(entry_app_var5) == False:
             ciphertext_input = cs.encrypt(entry_passwd_var6)
             created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
@@ -182,6 +187,26 @@ class SettingsForm(tk.Frame):
         else:
             messagebox.showerror("Reset Fail", "Settings Reset Failed")
 
+    def reload_app_func(self):
+        input_uname = cs.get_uname()
+        in_file = input_uname+".json"
+
+        input_data = cs.read_settings(in_file)
+        for data_file in input_data['Settings']:
+            var1 = data_file['app1']
+            var2 = data_file['app2']
+            var3 = data_file['app3']
+            var4 = data_file['app4']
+            var5 = data_file['app5']
+        
+        
+        self.entry_app1.insert(0, var1)
+        self.entry_app2.insert(0, var2)
+        self.entry_app3.insert(0, var3)
+        self.entry_app4.insert(0, var4)
+        self.entry_app5.insert(0, var5)
+        self.label_uname_display.config(text=input_uname)  
+    
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -201,8 +226,6 @@ class SettingsForm(tk.Frame):
         self.entry_app4 = tk.Entry(self)
         self.entry_app5 = tk.Entry(self)
         self.entry_password_settingsui = tk.Entry(self, show="*")
-
-
 
         self.label_app1.grid(row=0)
         self.label_app2.grid(row=1)
@@ -239,6 +262,9 @@ class SettingsForm(tk.Frame):
         sel_app4tn.grid(row=3,column=2)
         sel_app5tn = tk.Button(self, text="Select", command=self.sel_app5_func)
         sel_app5tn.grid(row=4,column=2)
+        reload_appbtn = tk.Button(self, text="Reload", command=self.reload_app_func)
+        reload_appbtn.grid(row=5,column=2)
+
 
 class StartApp(tk.Tk):
 
