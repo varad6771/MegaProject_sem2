@@ -4,7 +4,7 @@ from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
 
-# TODO: to set val of set settings in SettingsForm entry and labels
+# TODO: to set val of set settings in SettingsForm entry and labels automatically instead of reload_appbtn
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -140,27 +140,43 @@ class SettingsForm(tk.Frame):
     def save_func(self):
         print("in save_func")
         global entry_passwd_var6
+        global entry_app_var1_save_func
+        global entry_app_var2_save_func
+        global entry_app_var3_save_func
+        global entry_app_var4_save_func
+        global entry_app_var5_save_func
+
         entry_passwd_var6 = self.entry_password_settingsui.get()
+        entry_app_var1_save_func = self.entry_app1.get()
+        entry_app_var2_save_func = self.entry_app2.get()
+        entry_app_var3_save_func = self.entry_app3.get()
+        entry_app_var4_save_func = self.entry_app4.get()
+        entry_app_var5_save_func = self.entry_app5.get()
+
+
+
 
         input_uname = cs.get_uname()
-        input_pwd = cs.get_pwd()
-        print (input_pwd)
-
+        
+        #BUG if password empty, getPwd is not working
         if cs.checkEmpty(entry_passwd_var6) == True:
+            input_pwd = cs.get_pwd()
+            print (input_pwd)
             entry_passwd_var6 = input_pwd
             print("in checkEmpty")
             print(entry_passwd_var6)
         else:
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
-
-        #BUG if these fields are emty at the time of saving i.e user has not selected the in that session
-        # it gives error so it is modified to this Please check last commit with tag full working
-        if cs.checkEmpty(entry_app_var1) == False and cs.checkEmpty(entry_app_var2) == False and cs.checkEmpty(entry_app_var3) == False and cs.checkEmpty(entry_app_var4) == False and cs.checkEmpty(entry_app_var5) == False:
-            ciphertext_input = cs.encrypt(entry_passwd_var6)
-            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
+        if cs.checkEmpty(entry_app_var1_save_func) == True and cs.checkEmpty(entry_app_var2_save_func) == True and cs.checkEmpty(entry_app_var3_save_func) == True and cs.checkEmpty(entry_app_var4_save_func) == True and cs.checkEmpty(entry_app_var5_save_func) == True:
+            entry_app_var1_save_func = self.entry_app1.get()
+            entry_app_var2_save_func = self.entry_app2.get()
+            entry_app_var3_save_func = self.entry_app3.get()
+            entry_app_var4_save_func = self.entry_app4.get()
+            entry_app_var5_save_func = self.entry_app5.get()
         else:
-            messagebox.showerror("Empty Fields","Please fill all the fields")
+            ciphertext_input = cs.encrypt(entry_passwd_var6)
+            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1_save_func, entry_app_var2_save_func, entry_app_var3_save_func, entry_app_var4_save_func, entry_app_var5_save_func)
 
 
         if cs.file_existence(created_settings_file) == True:
