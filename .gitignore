@@ -9,6 +9,11 @@ __pycache__/
 *.xml
 *.iml
 
+# images
+*.jpeg
+*.jpg
+*.png
+
 # Distribution / packaging
 .Python
 build/
@@ -22,6 +27,7 @@ lib64/
 parts/
 sdist/
 var/
+frozen_graphs/
 wheels/
 *.egg-info/
 .installed.cfg
