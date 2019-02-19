@@ -2,7 +2,9 @@
             # p2 = (int(right), int(bottom))
 #roi = image_np[int(left):int(right), int(top):int(bottom)]
 
-
+if __name__ == '__main__':
+    detection()
+    classify()
 
 
 

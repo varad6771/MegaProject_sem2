@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
+import recognize as re
 
 # TODO: to set val of set settings in SettingsForm entry and labels
 class LoginForm(tk.Frame):
@@ -99,6 +100,8 @@ class DashboardForm(tk.Frame):
 
     def runapp_func(self):
         print("In the run app func")
+        re.detection()
+        re.classify()
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
