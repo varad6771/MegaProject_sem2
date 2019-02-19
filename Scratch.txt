@@ -1,3 +1,12 @@
+# p1 = (int(left), int(top))
+            # p2 = (int(right), int(bottom))
+#roi = image_np[int(left):int(right), int(top):int(bottom)]
+
+
+
+
+
+
 # if __name__ == '__main__':
 #     write_settings('varad', 'vanjape', 'app1','app2','app3')
 #     read_settings()
@@ -18,20 +27,12 @@ shutil.rmtree() deletes a directory and all its contents.
 
 
 
-# referred for switching between windows
-https://developer.gnome.org/gtk3/stable/GtkWindow.html
-https://developer.gnome.org/gtk3/stable/GtkApplication.html#gtk-application-get-window-by-id
-https://www.bachsau.com/2015/07/13/how-to-use-gtk-3-in-python-to-manage-your-whole-application/
-https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html#example
+
 -------------------------------------------------------------------------------------------------------------------------
 OutputBox.insert(END, "Example text")
 
 
-https://code.i-harness.com/en/q/7324c2
-https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
 
-
-http://effbot.org/tkinterbook/text.htm#patterns
 
 
 
@@ -47,10 +48,7 @@ http://effbot.org/tkinterbook/text.htm#patterns
         e=Entry(sign,show="*",textvariable=upass_sign,width=15,bg="lightgreen").place(x=330,y=160)
         '''
 
-
-
-
-          def login_func(self):
+    def login_func(self):
         # print("Clicked")
         input_uname = self.entry_username.get()
         input_pwd = self.entry_password.get()
@@ -110,26 +108,6 @@ http://effbot.org/tkinterbook/text.htm#patterns
 root = Tk()
 lf = LoginFrame(root)
 root.mainloop()
-
-
-
-
-dynamic hand gesture recognition github
-https://www.codeingschool.com/2019/01/real-time-hand-gesture-recognition-using-python.html
-https://github.com/subhamroy021/Hand-Gestures
-https://www.geeksforgeeks.org/project-idea-dynamic-hand-gesture-recognition-using-neural-network/
-
-https://github.com/mahaveerverma/hand-gesture-recognition-opencv
-https://github.com/sabs231/hand-gesture-recon
-https://abhishek4273.com/2014/07/20/motion-tracking-using-opencv/
-http://answers.opencv.org/question/175258/dynamic-gesture-recognition/
-https://abhishek4273.com/2014/07/20/motion-tracking-using-opencv/
-https://gogul09.github.io/software/hand-gesture-recognition-p1
-
-
-https://docs.opencv.org/3.0-beta/modules/optflow/doc/motion_templates.html
-
-
 
 
 # trial.py
@@ -216,3 +194,37 @@ class PageTwo(tk.Frame):
 if __name__ == "__main__":
     app = SampleApp()
     app.mainloop()
+
+
+
+
+// dynamic hand gesture recognition github
+https://www.codeingschool.com/2019/01/real-time-hand-gesture-recognition-using-python.html
+https://github.com/subhamroy021/Hand-Gestures
+https://www.geeksforgeeks.org/project-idea-dynamic-hand-gesture-recognition-using-neural-network/
+https://github.com/mahaveerverma/hand-gesture-recognition-opencv
+https://github.com/sabs231/hand-gesture-recon
+https://abhishek4273.com/2014/07/20/motion-tracking-using-opencv/
+http://answers.opencv.org/question/175258/dynamic-gesture-recognition/
+https://abhishek4273.com/2014/07/20/motion-tracking-using-opencv/
+https://gogul09.github.io/software/hand-gesture-recognition-p1
+https://docs.opencv.org/3.0-beta/modules/optflow/doc/motion_templates.html
+
+// crop image to roi
+http://answers.opencv.org/question/29260/how-to-save-a-rectangular-roi/
+https://www.codementor.io/innat_2k14/extract-a-particular-object-from-images-using-opencv-in-python-jfogyig5u
+https://stackoverflow.com/questions/39493195/cropping-an-image-with-respect-to-co-ordinates-selected
+http://answers.opencv.org/question/11405/crop-image-using-four-points/
+https://www.learnopencv.com/how-to-select-a-bounding-box-roi-in-opencv-cpp-python/
+http://answers.opencv.org/question/87261/extract-parts-from-image/
+
+// others
+https://code.i-harness.com/en/q/7324c2
+https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
+http://effbot.org/tkinterbook/text.htm#patterns
+
+// switching between windows
+https://developer.gnome.org/gtk3/stable/GtkWindow.html
+https://developer.gnome.org/gtk3/stable/GtkApplication.html#gtk-application-get-window-by-id
+https://www.bachsau.com/2015/07/13/how-to-use-gtk-3-in-python-to-manage-your-whole-application/
+https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html#example

@@ -57,18 +57,26 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, classes, im
         if (scores[i] > score_thresh):
             (left, right, top, bottom) = (boxes[i][1] * im_width, boxes[i][3] * im_width,
                                           boxes[i][0] * im_height, boxes[i][2] * im_height)
-            p1 = (int(left), int(top))
-            p2 = (int(right), int(bottom))
+            
+            left_val = int(left)
+            right_val = int(right)
+            top_val = int(top)
+            bottom_val = int(bottom)
+            height_val = bottom_val - top_val
+            width_val = right_val - left_val 
+
+            
+            p1 = (left_val, top_val)
+            p2 = (right_val, bottom_val)
 
             cv2.rectangle(image_np, p1, p2, color , 3, 1)
             
-            # need to cheange dimensions according to image check it in images folder and then cheange
-            # accordingly
-            roi = image_np[int(left):int(right), int(top):int(bottom)]
+            roi = image_np[top_val:top_val+height_val, left_val:left_val+width_val]
+            
             file = "/home/varadvanjape/Code/Python/Sem_2/MegaProject_sem2/Images/image1.png"
             cv2.imwrite(file,roi)
-            #print("image cropped")
-            
+
+
             cv2.putText(image_np, 'hand', (int(left), int(top)-5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5 , color, 2)
 

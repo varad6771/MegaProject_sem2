@@ -4,6 +4,7 @@ from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
 
+# TODO: to set val of set settings in SettingsForm entry and labels
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -99,17 +100,6 @@ class DashboardForm(tk.Frame):
     def runapp_func(self):
         print("In the run app func")
 
-    def settings_func(self):
-        print("In the settins func")
-        
-        print(self.controller.add_settings_frame("SettingsForm"))
-        if self.controller.add_settings_frame("SettingsForm") == "yes": 
-            print("in if DashboardForm")
-            #SettingsForm (parent=container, controller=self)
-            self.controller.show_frame("SettingsForm")
-        else:
-            print("frame is not displayed")
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -117,12 +107,11 @@ class DashboardForm(tk.Frame):
         runappbtn = tk.Button(self, text="Run app", command=self.runapp_func)
         runappbtn.grid(row=1,column=0)
 
-        settingsbtn = tk.Button(self, text="Settings Page", command=self.settings_func)
-        #settingsbtn = tk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
+        settingsbtn = tk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
         settingsbtn.grid(row=1,column=1)
         
 class SettingsForm(tk.Frame):
-    
+
     def sel_app1_func(self):
         global entry_app_var1
         entry_app_var1 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
@@ -151,43 +140,27 @@ class SettingsForm(tk.Frame):
     def save_func(self):
         print("in save_func")
         global entry_passwd_var6
-        global entry_app_var1_save_func
-        global entry_app_var2_save_func
-        global entry_app_var3_save_func
-        global entry_app_var4_save_func
-        global entry_app_var5_save_func
-
         entry_passwd_var6 = self.entry_password_settingsui.get()
-        entry_app_var1_save_func = self.entry_app1.get()
-        entry_app_var2_save_func = self.entry_app2.get()
-        entry_app_var3_save_func = self.entry_app3.get()
-        entry_app_var4_save_func = self.entry_app4.get()
-        entry_app_var5_save_func = self.entry_app5.get()
-
-
-
 
         input_uname = cs.get_uname()
-        
-        #BUG if password empty, getPwd is not working
+        input_pwd = cs.get_pwd()
+        print (input_pwd)
+
         if cs.checkEmpty(entry_passwd_var6) == True:
-            input_pwd = cs.get_pwd()
-            print (input_pwd)
             entry_passwd_var6 = input_pwd
             print("in checkEmpty")
             print(entry_passwd_var6)
         else:
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
-        if cs.checkEmpty(entry_app_var1_save_func) == True and cs.checkEmpty(entry_app_var2_save_func) == True and cs.checkEmpty(entry_app_var3_save_func) == True and cs.checkEmpty(entry_app_var4_save_func) == True and cs.checkEmpty(entry_app_var5_save_func) == True:
-            entry_app_var1_save_func = self.entry_app1.get()
-            entry_app_var2_save_func = self.entry_app2.get()
-            entry_app_var3_save_func = self.entry_app3.get()
-            entry_app_var4_save_func = self.entry_app4.get()
-            entry_app_var5_save_func = self.entry_app5.get()
-        else:
+
+        #BUG if these fields are emty at the time of saving i.e user has not selected the in that session
+        # it gives error so it is modified to this Please check last commit with tag full working
+        if cs.checkEmpty(entry_app_var1) == False and cs.checkEmpty(entry_app_var2) == False and cs.checkEmpty(entry_app_var3) == False and cs.checkEmpty(entry_app_var4) == False and cs.checkEmpty(entry_app_var5) == False:
             ciphertext_input = cs.encrypt(entry_passwd_var6)
-            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1_save_func, entry_app_var2_save_func, entry_app_var3_save_func, entry_app_var4_save_func, entry_app_var5_save_func)
+            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
+        else:
+            messagebox.showerror("Empty Fields","Please fill all the fields")
 
 
         if cs.file_existence(created_settings_file) == True:
@@ -237,7 +210,7 @@ class SettingsForm(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        print("in SettingsForm")
+        
         self.label_app1 = tk.Label(self, text="Application 1")
         self.label_app2 = tk.Label(self, text="Application 2")
         self.label_app3 = tk.Label(self, text="Application 3")
@@ -292,11 +265,12 @@ class SettingsForm(tk.Frame):
         reload_appbtn = tk.Button(self, text="Reload", command=self.reload_app_func)
         reload_appbtn.grid(row=5,column=2)
 
+
 class StartApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        global container
+
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
         # the container is where we'll stack a bunch of frames
@@ -308,8 +282,7 @@ class StartApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginForm, DashboardForm):
-        #for F in (LoginForm, DashboardForm, SettingsForm):
+        for F in (LoginForm, DashboardForm, SettingsForm):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -320,19 +293,8 @@ class StartApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("LoginForm")
-    
-    def add_settings_frame(self, page_name):
-        #root = tk()
-        settingspage = SettingsForm(parent=container, controller=self)
-        self.frames[page_name] = settingspage
-        print("settings frame added")
-        for Frame in self.frames:
-            print(self.frames[Frame])
-        
-        return "yes"
 
     def show_frame(self, page_name):
-        print(page_name)
         frame = self.frames[page_name]
         frame.tkraise()
 
