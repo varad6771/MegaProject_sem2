@@ -1,8 +1,5 @@
 ## Remaining Tasks
 - ### Main Application
-    - Change the paths in detector_utils.py && recognize.py to relative
-    - To replace keyboard q interrupt by time like 30 sec in recognize.py
-    - connect backend to frontend 
     - Add startup script for applications after probabilitiy vals are found
 ## Partially Done
     - Data set (Static model) 
