@@ -95,7 +95,3 @@ def classify():
             human_string = label_lines[node_id]
             score = predictions[0][node_id]
             print('%s (score = %.5f)' % (human_string, score))
-
-if __name__ == '__main__':
-    detection()
-    classify()

@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
+import recognize as re
 
 # TODO: to set val of set settings in SettingsForm entry and labels
 class LoginForm(tk.Frame):
@@ -99,7 +100,7 @@ class DashboardForm(tk.Frame):
 
     def runapp_func(self):
         print("In the run app func")
-
+        
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -114,27 +115,27 @@ class SettingsForm(tk.Frame):
 
     def sel_app1_func(self):
         global entry_app_var1
-        entry_app_var1 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        entry_app_var1 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
         self.entry_app1.insert(0, entry_app_var1)
 
     def sel_app2_func(self):
         global entry_app_var2
-        entry_app_var2 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        entry_app_var2 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
         self.entry_app2.insert(0,entry_app_var2)
 
     def sel_app3_func(self):
         global entry_app_var3
-        entry_app_var3 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        entry_app_var3 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
         self.entry_app3.insert(0,entry_app_var3)
     
     def sel_app4_func(self):
         global entry_app_var4
-        entry_app_var4 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        entry_app_var4 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
         self.entry_app4.insert(0,entry_app_var4)
     
     def sel_app5_func(self):
         global entry_app_var5
-        entry_app_var5 = filedialog.askopenfilename(filetypes=[("JPEG file","*.jpg")])
+        entry_app_var5 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
         self.entry_app5.insert(0,entry_app_var5)
 
     def save_func(self):
