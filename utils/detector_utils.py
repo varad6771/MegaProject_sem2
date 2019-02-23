@@ -62,28 +62,12 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, classes, im
             right_val = int(right)
             top_val = int(top)
             bottom_val = int(bottom)
-            height_val = bottom_val - top_val
-            width_val = right_val - left_val 
-
             
             p1 = (left_val, top_val)
             p2 = (right_val, bottom_val)
 
             cv2.rectangle(image_np, p1, p2, color , 3, 1)
             
-            roi = image_np[top_val:top_val+height_val, left_val:left_val+width_val]
-            
-            file = "/home/varadvanjape/Code/Python/Sem_2/MegaProject_sem2/Images/image1.png"
-            cv2.imwrite(file,roi)
-
-
-            cv2.putText(image_np, 'hand', (int(left), int(top)-5),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5 , color, 2)
-
-            cv2.putText(image_np, 'Accuracy: '+str("{0:.2f}".format(scores[i])),
-                        (int(left),int(top)-20),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
-
 # Actual detection .. generate scores and bounding boxes given an image
 def detect_objects(image_np, detection_graph, sess):
     # Definite input and output Tensors for detection_graph

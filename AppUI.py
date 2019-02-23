@@ -3,9 +3,9 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font  as tkfont
 import createSettings as cs
-import recognize as re
+import detection as det
 
-# TODO: to set val of set settings in SettingsForm entry and labels
+
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -100,7 +100,10 @@ class DashboardForm(tk.Frame):
 
     def runapp_func(self):
         print("In the run app func")
-        
+        #det.detect()
+        #det.predict()
+
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
