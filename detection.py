@@ -2,10 +2,7 @@ import cv2
 import datetime
 import argparse
 import imutils
-from imutils.video import VideoStream
-from utils import detector_utils as detector_utils
-
-
+import time
 import sys
 import os
 
@@ -14,6 +11,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import tensorflow as tf
+
+from imutils.video import VideoStream
+from utils import detector_utils as detector_utils
 
 
 # Disable tensorflow compilation warnings
@@ -43,7 +43,12 @@ def detect():
     global softmax_tensor
     global res
     global score
+    global frame
+    global mode_val
+    mode_val = 0
 
+
+    color = (0,255,0)
     label_lines = [line.rstrip() for line
                        in tf.gfile.GFile("output_labels.txt")]
 				   
@@ -88,17 +93,29 @@ def detect():
                 if (scores[0] > score_thresh):
                     (left, right, top, bottom) = (boxes[0][1] * im_width, boxes[0][3] * im_width,
                                               boxes[0][0] * im_height, boxes[0][2] * im_height)
-                    height=bottom-top;
-                    width=right-left;
+                    height = bottom - top;
+                    width = right - left;
                     img_cropped = frame[int(top):int(top+height), int(left):int(left+width)]	
                     img_cropped = cv2.cvtColor(img_cropped, cv2.COLOR_RGB2BGR)			
                     image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()		
     
                     res, score = predict(image_data)
                     print(res)
-                    print("score of label ",score)				
-                    #cv2.putText(frame, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
-                    cv2.putText(frame, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+                    print("score of label ",score)
+
+                    #if(score >= 0.6 and res == "fist" ):
+                    #    command_mode(mode_val)
+                    command_mode(res, score, mode_val)
+
+                    cv2.putText(frame, res, (int(left), int(top)-5),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5 , color, 2)
+
+                    cv2.putText(frame, 'Accuracy: '+str("{0:.2f}".format(score)),
+                        (int(left),int(top)-20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
+
+                    # cv2.putText(frame, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
+                    # cv2.putText(frame, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
                 	
                 # Draw bounding boxeses and text
                 detector_utils.draw_box_on_image(
@@ -106,6 +123,8 @@ def detect():
 
                 cv2.imshow('Detection', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
     
+
+                start = time.time()
                 if cv2.waitKey(25) & 0xFF == ord('q'):
                     cv2.destroyAllWindows()
                     vs.stop()
@@ -113,26 +132,29 @@ def detect():
         except KeyboardInterrupt:
             pass#print("Average FPS: ", str("{0:.2f}".format(fps)))
 
-def controller():
-    global mode
-    mode = 1
-    print("in controller res and score ",res,score)
 
-    if(score >= 0.6 and res == 'fist'):
-        normal_mode()
-    else:
-        command_mode()
+def normal_mode(mode_val):
+    # cv2.putText(frame,"in normal_mode mode",  (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
+    # print("in normal mode")
 
-
-def normal_mode():
-    print("in normal mode")
+    if(score >= 0.6 and res == "fist" and mode_val == 1):
+        mode_val = 0
+        command_mode( mode_val)
 
 
-def command_mode():
-    print("in command mode")
+def command_mode(res, score, mode_val):
+    # cv2.putText(frame,"in command mode",  (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
+    # print("in command mode")
+    
+    if (score >= 0.6 and res == "three"):
+        mode_val = 1
+        normal_mode(mode_val)
+    elif (score >= 0.6 and res == "fist" and mode_val != 1):
+        print("rest of the functions")
+
+
 
 
 if __name__ == '__main__':
     detect()
     predict()
-    controller()
