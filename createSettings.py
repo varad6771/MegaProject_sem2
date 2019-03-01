@@ -3,11 +3,11 @@ from passlib.context import CryptContext
 import json
 import os
 import os.path
-import base64
-import hashlib
 
 uname = ""
 pwd = ""
+
+
 def write_settings(input_name, input_password, app1, app2, app3, app4, app5):
     """
     writes settings to file in json format
@@ -39,6 +39,7 @@ def write_settings(input_name, input_password, app1, app2, app3, app4, app5):
 
     return out_fname
 
+
 def read_settings(in_fname):
     """
     writes settings to file in json format
@@ -47,8 +48,8 @@ def read_settings(in_fname):
     """
     with open(in_fname, 'r') as json_file:
         input_data = json.load(json_file)
-    
     return input_data
+
 
 def file_existence(in_fname):
     """
@@ -60,6 +61,8 @@ def file_existence(in_fname):
         return True
     
     return False
+
+
 
 def file_reset(in_fname):
     """
@@ -73,6 +76,7 @@ def file_reset(in_fname):
     
     return True
 
+
 def encrypt(raw):
     """
     encrypt the password
@@ -85,6 +89,7 @@ def encrypt(raw):
         pbkdf2_sha256__default_rounds=3000
     )
     return pwd_context.encrypt(raw)
+
 
 def checkPwd(red_pwd, inp_pwd):
     """
@@ -100,40 +105,46 @@ def checkPwd(red_pwd, inp_pwd):
     )
     return pwd_context.verify(inp_pwd, red_pwd)
 
+
 def checkUnm(red_unm, inp_unm):
     """
     check uname
         :param red_unm: 
         :param inp_unm:
         @return boolean:
-    """   
+    """
     if red_unm == inp_unm:
         return True
-    
+
     return False
-  
+
+
 def checkEmpty(field_val):
     """
     check empty fields
         :param field_val:
-        @return boolean: 
+        @return boolean:
     """
     if field_val == "":
         return True
-    
+
     return False
+
 
 def set_uname(input_uname):
     global uname
     uname = input_uname
 
+
 def set_pwd(input_pwd):
     global pwd
     pwd = input_pwd
 
+
 def get_pwd():
     print(pwd)
     return pwd
+
 
 def get_uname():
     print(uname)
