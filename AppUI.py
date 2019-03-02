@@ -11,7 +11,6 @@ import createSettings as cs
 class LoginForm(tk.Frame):
 
     def login_func(self):
-        # print("Clicked")
         input_uname = self.entry_username.get()
         input_pwd = self.entry_password.get()
 
@@ -23,15 +22,23 @@ class LoginForm(tk.Frame):
             self.entry_username.delete(0, tk.END)
             self.entry_password.delete(0, tk.END)
         else:
+            self.controller.app_data["Username"].set(input_uname)
+            self.controller.app_data["in_file"].set(in_file) 
+            self.controller.app_data["password"].set(input_pwd)
+
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
-
+                
                 red_pwd = data_file['password']
                 red_unm = data_file['name']
                 if cs.check_unm(red_unm, input_uname) is True and cs.check_pswd(red_pwd, input_pwd) is True:
                     print("login success")
+                    self.controller.app_data["app_1"].set(data_file['app1']) 
+                    self.controller.app_data["app_2"].set(data_file['app2'])
+                    self.controller.app_data["app_3"].set(data_file['app3'])
+                    self.controller.app_data["app_4"].set(data_file['app4'])
+                    self.controller.app_data["app_5"].set(data_file['app5'])
                     self.controller.show_frame("DashboardForm")
-                    cs.set_uname(input_uname)
                     print("on DashboardForm1")
                 else:
                     messagebox.showerror("Login error", "Incorrect Credentials")
@@ -100,10 +107,13 @@ class LoginForm(tk.Frame):
 
 class DashboardForm(tk.Frame):
 
-    # TODO use code in megaproject_sem2_research and then get & pass data to get_user_prefs see if its working
     def runapp_func(self):
         print("In the run app func")
-
+        app1_dbf = self.controller.app_data["app_1"].get()
+        app2_dbf = self.controller.app_data["app_2"].get()
+        app3_dbf = self.controller.app_data["app_3"].get()
+        app4_dbf = self.controller.app_data["app_4"].get()
+        app5_dbf = self.controller.app_data["app_5"].get()
         # det.get_user_prefs()
         # det.detect()
         # det.predict()
@@ -154,8 +164,8 @@ class SettingsForm(tk.Frame):
         global entry_passwd_var6
         entry_passwd_var6 = self.entry_password_settingsui.get()
 
-        input_uname = cs.get_uname()
-        input_pwd = cs.get_pwd()
+        input_uname = self.controller.app_data["Username"].get()
+        input_pwd = self.controller.app_data["password"].get()
         print(input_pwd)
 
         if cs.check_empty(entry_passwd_var6) is True:
@@ -177,6 +187,12 @@ class SettingsForm(tk.Frame):
             messagebox.showerror("Empty Fields", "Please fill all the fields")
 
         if cs.file_existence(created_settings_file) is True:
+            self.controller.app_data["app_1"].set(entry_app_var1) 
+            self.controller.app_data["app_2"].set(entry_app_var2)
+            self.controller.app_data["app_3"].set(entry_app_var3)
+            self.controller.app_data["app_4"].set(entry_app_var4)
+            self.controller.app_data["app_5"].set(entry_app_var5)
+            self.controller.app_data["password"].set(entry_passwd_var6)
             print("settings saved file name   " + created_settings_file)
             messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
         else:
@@ -191,8 +207,7 @@ class SettingsForm(tk.Frame):
         self.entry_app5.delete(0, tk.END)
         self.entry_password_settingsui.delete(0, tk.END)
 
-        input_uname = cs.get_uname()
-        in_file = input_uname + ".json"
+        in_file = self.controller.app_data["in_file"].get()
         print("reset file name " + in_file)
 
         if cs.file_reset(in_file) is True:
@@ -201,9 +216,9 @@ class SettingsForm(tk.Frame):
             messagebox.showerror("Reset Fail", "Settings Reset Failed")
 
     def reload_app_func(self):
-        input_uname = cs.get_uname()
-        in_file = input_uname + ".json"
-
+        input_uname = self.controller.app_data["Username"].get()
+        in_file = self.controller.app_data["in_file"].get()
+        
         input_data = cs.read_settings(in_file)
         for data_file in input_data['Settings']:
             var1 = data_file['app1']
@@ -296,6 +311,16 @@ class StartApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.app_data = {
+            "Username": tk.StringVar(),
+            "password": tk.StringVar(),
+            "in_file": tk.StringVar(),
+            "app_1": tk.StringVar(),
+            "app_2": tk.StringVar(),
+            "app_3": tk.StringVar(),
+            "app_4": tk.StringVar(),
+            "app_5": tk.StringVar(),
+        }
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
@@ -324,7 +349,11 @@ class StartApp(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
+    def get_page(self, page_class):
+        return self.frames[page_class]
+
 
 if __name__ == "__main__":
     app = StartApp()
+    app.title("My app")
     app.mainloop()
