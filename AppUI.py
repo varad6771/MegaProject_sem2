@@ -1,9 +1,11 @@
-import tkinter as tk  
+import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
-from tkinter import font  as tkfont
+from tkinter import font as tkfont
 import createSettings as cs
-import detection as det
+
+
+# import detection as det
 
 
 class LoginForm(tk.Frame):
@@ -13,10 +15,9 @@ class LoginForm(tk.Frame):
         input_uname = self.entry_username.get()
         input_pwd = self.entry_password.get()
 
+        in_file = input_uname + ".json"
 
-        in_file = input_uname+".json"
-
-        if cs.file_existence(in_file) == False:
+        if cs.file_existence(in_file) is False:
             print("file does not exist so login fail")
             messagebox.showerror("Login Fail", "User does not Exist")
             self.entry_username.delete(0, tk.END)
@@ -27,7 +28,7 @@ class LoginForm(tk.Frame):
 
                 red_pwd = data_file['password']
                 red_unm = data_file['name']
-                if cs.checkUnm(red_unm, input_uname) == True and cs.checkPwd(red_pwd, input_pwd) == True:
+                if cs.check_unm(red_unm, input_uname) is True and cs.check_pswd(red_pwd, input_pwd) is True:
                     print("login success")
                     self.controller.show_frame("DashboardForm")
                     cs.set_uname(input_uname)
@@ -35,40 +36,41 @@ class LoginForm(tk.Frame):
                 else:
                     messagebox.showerror("Login error", "Incorrect Credentials")
                     input_uname = self.entry_username.delete(0, tk.END)
-                    input_pwd  = self.entry_password.delete(0, tk.END)
+                    input_pwd = self.entry_password.delete(0, tk.END)
 
     def register_func(self):
         print("in register_func")
         uname_val = self.entry_username.get()
-        pwd_val  = self.entry_password.get()
-        in_file = uname_val+".json"
+        pwd_val = self.entry_password.get()
+        in_file = uname_val + ".json"
 
         ciphertext_input = cs.encrypt(pwd_val)
 
-        if cs.file_existence(in_file) == False:
+        if cs.file_existence(in_file) is False:
             print("file does not exist so write settings")
-            if cs.checkEmpty(uname_val) == False and cs.checkEmpty(pwd_val) == False:
-                created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc", "abc")
-                print("register successful file created  "+created_settings_file)
+            if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
+                created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc",
+                                                          "abc")
+                print("register successful file created  " + created_settings_file)
                 messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
                 self.entry_username.delete(0, tk.END)
                 self.entry_password.delete(0, tk.END)
-                
+
             else:
-                messagebox.showerror("Empty Credentials","Credential cannot be empty!! Please fill all the fields")
+                messagebox.showerror("Empty Credentials", "Credential cannot be empty!! Please fill all the fields")
         else:
             input_data = cs.read_settings(in_file)
             for settings_data_file in input_data['Settings']:
                 if settings_data_file['name'] == uname_val:
                     print("data exist! you cannot re-register")
-                    messagebox.showerror("Error","User Already Exists!! You cannot Re-Register")
+                    messagebox.showerror("Error", "User Already Exists!! You cannot Re-Register")
                     break
 
     def clear_func(self):
         print("in clear func")
         self.entry_username.delete(0, tk.END)
         self.entry_password.delete(0, tk.END)
-        
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -84,62 +86,68 @@ class LoginForm(tk.Frame):
         self.entry_username.grid(row=0, column=1)
         self.entry_password.grid(row=1, column=1)
 
-
         loginbtn = tk.Button(self, text="Login", command=self.login_func)
-        loginbtn.grid(row=2,column=0)
+        loginbtn.grid(row=2, column=0)
 
         registerbtn = tk.Button(self, text="Register", command=self.register_func)
-        registerbtn.grid(row=2,column=1)
+        registerbtn.grid(row=2, column=1)
 
         clearbtn = tk.Button(self, text="Clear", command=self.clear_func)
-        clearbtn.grid(row=2,column=2)
+        clearbtn.grid(row=2, column=2)
 
         self.pack()
 
+
 class DashboardForm(tk.Frame):
 
+    # TODO use code in megaproject_sem2_research and then get & pass data to get_user_prefs see if its working
     def runapp_func(self):
         print("In the run app func")
-        #det.detect()
-        #det.predict()
 
+        # det.get_user_prefs()
+        # det.detect()
+        # det.predict()
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        
+
         runappbtn = tk.Button(self, text="Run app", command=self.runapp_func)
-        runappbtn.grid(row=1,column=0)
+        runappbtn.grid(row=1, column=0)
 
         settingsbtn = tk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
-        settingsbtn.grid(row=1,column=1)
-        
+        settingsbtn.grid(row=1, column=1)
+
+        helpbtn = tk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
+        helpbtn.grid(row=1, column=2)
+
+
 class SettingsForm(tk.Frame):
 
     def sel_app1_func(self):
         global entry_app_var1
-        entry_app_var1 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
+        entry_app_var1 = filedialog.askopenfilename(filetypes=[("exe file", "*.exe")])
         self.entry_app1.insert(0, entry_app_var1)
 
     def sel_app2_func(self):
         global entry_app_var2
-        entry_app_var2 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
-        self.entry_app2.insert(0,entry_app_var2)
+        entry_app_var2 = filedialog.askopenfilename(filetypes=[("exe file", "*.exe")])
+        self.entry_app2.insert(0, entry_app_var2)
 
     def sel_app3_func(self):
         global entry_app_var3
-        entry_app_var3 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
-        self.entry_app3.insert(0,entry_app_var3)
-    
+        entry_app_var3 = filedialog.askopenfilename(filetypes=[("exe file", "*.exe")])
+        self.entry_app3.insert(0, entry_app_var3)
+
     def sel_app4_func(self):
         global entry_app_var4
-        entry_app_var4 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
-        self.entry_app4.insert(0,entry_app_var4)
-    
+        entry_app_var4 = filedialog.askopenfilename(filetypes=[("exe file", "*.exe")])
+        self.entry_app4.insert(0, entry_app_var4)
+
     def sel_app5_func(self):
         global entry_app_var5
-        entry_app_var5 = filedialog.askopenfilename(filetypes=[("exe file","*.exe")])
-        self.entry_app5.insert(0,entry_app_var5)
+        entry_app_var5 = filedialog.askopenfilename(filetypes=[("exe file", "*.exe")])
+        self.entry_app5.insert(0, entry_app_var5)
 
     def save_func(self):
         print("in save_func")
@@ -148,30 +156,31 @@ class SettingsForm(tk.Frame):
 
         input_uname = cs.get_uname()
         input_pwd = cs.get_pwd()
-        print (input_pwd)
+        print(input_pwd)
 
-        if cs.checkEmpty(entry_passwd_var6) == True:
+        if cs.check_empty(entry_passwd_var6) is True:
             entry_passwd_var6 = input_pwd
-            print("in checkEmpty")
+            print("in check_empty")
             print(entry_passwd_var6)
         else:
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
-
-        #BUG if these fields are emty at the time of saving i.e user has not selected the in that session
+        # TODO if these fields are emty at the time of saving i.e user has not selected the in that session
         # it gives error so it is modified to this Please check last commit with tag full working
-        if cs.checkEmpty(entry_app_var1) == False and cs.checkEmpty(entry_app_var2) == False and cs.checkEmpty(entry_app_var3) == False and cs.checkEmpty(entry_app_var4) == False and cs.checkEmpty(entry_app_var5) == False:
+        if cs.check_empty(entry_app_var1) is False and cs.check_empty(entry_app_var2) is False and cs.check_empty(
+                entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
+                entry_app_var5) is False:
             ciphertext_input = cs.encrypt(entry_passwd_var6)
-            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
+            created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2,
+                                                      entry_app_var3, entry_app_var4, entry_app_var5)
         else:
-            messagebox.showerror("Empty Fields","Please fill all the fields")
+            messagebox.showerror("Empty Fields", "Please fill all the fields")
 
-
-        if cs.file_existence(created_settings_file) == True:
-            print("settings saved file name   "+created_settings_file)
-            messagebox.showinfo("Save Succesful","New Settings are Updated Successfully ")
+        if cs.file_existence(created_settings_file) is True:
+            print("settings saved file name   " + created_settings_file)
+            messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
         else:
-            messagebox.showerror("Update Failed","New Settings are not Updated!! Please try again later")
+            messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
 
     def reset_func(self):
         print("in reset_func")
@@ -181,19 +190,19 @@ class SettingsForm(tk.Frame):
         self.entry_app4.delete(0, tk.END)
         self.entry_app5.delete(0, tk.END)
         self.entry_password_settingsui.delete(0, tk.END)
-        
+
         input_uname = cs.get_uname()
-        in_file = input_uname+".json"
-        print("reset file name "+in_file)
-        
-        if  cs.file_reset(in_file) == True:
+        in_file = input_uname + ".json"
+        print("reset file name " + in_file)
+
+        if cs.file_reset(in_file) is True:
             messagebox.showinfo("Succesful Reset", "Settings Reset Success!! Please enter new settings")
         else:
             messagebox.showerror("Reset Fail", "Settings Reset Failed")
 
     def reload_app_func(self):
         input_uname = cs.get_uname()
-        in_file = input_uname+".json"
+        in_file = input_uname + ".json"
 
         input_data = cs.read_settings(in_file)
         for data_file in input_data['Settings']:
@@ -202,19 +211,18 @@ class SettingsForm(tk.Frame):
             var3 = data_file['app3']
             var4 = data_file['app4']
             var5 = data_file['app5']
-        
-        
+
         self.entry_app1.insert(0, var1)
         self.entry_app2.insert(0, var2)
         self.entry_app3.insert(0, var3)
         self.entry_app4.insert(0, var4)
         self.entry_app5.insert(0, var5)
-        self.label_uname_display.config(text=input_uname)  
-    
+        self.label_uname_display.config(text=input_uname)
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        
+
         self.label_app1 = tk.Label(self, text="Application 1")
         self.label_app2 = tk.Label(self, text="Application 2")
         self.label_app3 = tk.Label(self, text="Application 3")
@@ -235,9 +243,9 @@ class SettingsForm(tk.Frame):
         self.label_app2.grid(row=1)
         self.label_app3.grid(row=2)
         self.label_app4.grid(row=3)
-        self.label_app5.grid(row=4) 
-        self.label_uname.grid(row=5)       
-        self.label_uname_display.grid(row=5,column=1)
+        self.label_app5.grid(row=4)
+        self.label_uname.grid(row=5)
+        self.label_uname_display.grid(row=5, column=1)
         self.label_password_settingsui.grid(row=6)
 
         self.entry_app1.grid(row=0, column=1)
@@ -248,26 +256,40 @@ class SettingsForm(tk.Frame):
         self.entry_password_settingsui.grid(row=6, column=1)
 
         resetbtn = tk.Button(self, text="Reset", command=self.reset_func)
-        resetbtn.grid(row=7,column=0)
+        resetbtn.grid(row=7, column=0)
 
         savebtn = tk.Button(self, text="Save", command=self.save_func)
-        savebtn.grid(row=7,column=1)
+        savebtn.grid(row=7, column=1)
 
         backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.grid(row=7,column=2)
+        backbtn.grid(row=7, column=2)
 
         sel_app1btn = tk.Button(self, text="Select", command=self.sel_app1_func)
-        sel_app1btn.grid(row=0,column=2)
+        sel_app1btn.grid(row=0, column=2)
         sel_app2btn = tk.Button(self, text="Select", command=self.sel_app2_func)
-        sel_app2btn.grid(row=1,column=2)
+        sel_app2btn.grid(row=1, column=2)
         sel_app3btn = tk.Button(self, text="Select", command=self.sel_app3_func)
-        sel_app3btn.grid(row=2,column=2)
+        sel_app3btn.grid(row=2, column=2)
         sel_app4tn = tk.Button(self, text="Select", command=self.sel_app4_func)
-        sel_app4tn.grid(row=3,column=2)
+        sel_app4tn.grid(row=3, column=2)
         sel_app5tn = tk.Button(self, text="Select", command=self.sel_app5_func)
-        sel_app5tn.grid(row=4,column=2)
+        sel_app5tn.grid(row=4, column=2)
         reload_appbtn = tk.Button(self, text="Reload", command=self.reload_app_func)
-        reload_appbtn.grid(row=5,column=2)
+        reload_appbtn.grid(row=5, column=2)
+
+
+class HelpForm(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
+        backbtn.grid()
+
+        help_data = cs.read_help_file()
+        text = tk.Text(self)
+        text.insert(tk.END, help_data)
+        text.grid(row=2, column=0)
 
 
 class StartApp(tk.Tk):
@@ -286,7 +308,7 @@ class StartApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginForm, DashboardForm, SettingsForm):
+        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -301,6 +323,7 @@ class StartApp(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
+
 
 if __name__ == "__main__":
     app = StartApp()

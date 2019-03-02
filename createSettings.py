@@ -63,7 +63,6 @@ def file_existence(in_fname):
     return False
 
 
-
 def file_reset(in_fname):
     """
     remove (reset) the file from path
@@ -75,6 +74,12 @@ def file_reset(in_fname):
         return False
     
     return True
+
+
+def read_help_file():
+    file_data = open('data.txt', 'r')
+    help_data = file_data.read()
+    return help_data
 
 
 def encrypt(raw):
@@ -91,7 +96,7 @@ def encrypt(raw):
     return pwd_context.encrypt(raw)
 
 
-def checkPwd(red_pwd, inp_pwd):
+def check_pswd(red_pwd, inp_pwd):
     """
     check passwords
         :param red_pwd: 
@@ -106,7 +111,7 @@ def checkPwd(red_pwd, inp_pwd):
     return pwd_context.verify(inp_pwd, red_pwd)
 
 
-def checkUnm(red_unm, inp_unm):
+def check_unm(red_unm, inp_unm):
     """
     check uname
         :param red_unm: 
@@ -119,7 +124,7 @@ def checkUnm(red_unm, inp_unm):
     return False
 
 
-def checkEmpty(field_val):
+def check_empty(field_val):
     """
     check empty fields
         :param field_val:

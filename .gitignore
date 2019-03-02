@@ -112,5 +112,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#settings for editors
+# settings for editors
 .vscode/
+.idea/
+
+# others
+*.pb

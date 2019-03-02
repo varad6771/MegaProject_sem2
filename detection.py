@@ -115,11 +115,22 @@ def detect():
 
 
 def actions_invoke(res, score):
-
+    
     if score >= 0.6 and res == "fist":
         print("rest of the functions")
+    elif score >= 0.6 and res == "two":
+        print("in action for two")
+    elif score >= 0.6 and res == "three":
+        print("in action for three")
+    elif score >= 0.6 and res == "four":
+        print("in action for four")
+
+
+def get_user_prefs():
+    print("in get_user_prefs")
 
 
 if __name__ == '__main__':
     detect()
     predict()
+
