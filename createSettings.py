@@ -78,7 +78,7 @@ def file_reset(in_fname):
 
 def read_help_file():
     file_data = open('data.txt', 'r')
-    help_data = file_data.read()
+    help_data = file_data.read()  # type: str
     return help_data
 
 
@@ -134,23 +134,3 @@ def check_empty(field_val):
         return True
 
     return False
-
-
-def set_uname(input_uname):
-    global uname
-    uname = input_uname
-
-
-def set_pwd(input_pwd):
-    global pwd
-    pwd = input_pwd
-
-
-def get_pwd():
-    print(pwd)
-    return pwd
-
-
-def get_uname():
-    print(uname)
-    return uname
