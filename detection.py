@@ -27,7 +27,7 @@ def predict(image_data):
             res = human_string
     return res, max_score
 
-
+# TODO clicking q key does not work. the app stays in actions_invoke please check control flow
 def detect():
     global sess
     global label_lines
@@ -115,7 +115,8 @@ def detect():
 
 
 def actions_invoke(res, score):
-    
+    print("in actions_invoke")
+
     if score >= 0.6 and res == "fist":
         print("rest of the functions")
     elif score >= 0.6 and res == "two":
@@ -126,8 +127,14 @@ def actions_invoke(res, score):
         print("in action for four")
 
 
-def get_user_prefs():
+def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
     print("in get_user_prefs")
+    global app_pref1, app_pref2, app_pref3, app_pref4, app_pref5
+    app_pref1 = pref1
+    app_pref2 = pref2
+    app_pref3 = pref3
+    app_pref4 = pref4
+    app_pref5 = pref5
 
 
 if __name__ == '__main__':

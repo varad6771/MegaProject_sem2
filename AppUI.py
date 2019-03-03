@@ -3,8 +3,6 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font as tkfont
 import createSettings as cs
-
-
 # import detection as det
 
 
@@ -114,7 +112,7 @@ class DashboardForm(tk.Frame):
         app3_dbf = self.controller.app_data["app_3"].get()
         app4_dbf = self.controller.app_data["app_4"].get()
         app5_dbf = self.controller.app_data["app_5"].get()
-        # det.get_user_prefs()
+        # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
         # det.detect()
         # det.predict()
 
