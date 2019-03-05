@@ -27,7 +27,9 @@ def predict(image_data):
             res = human_string
     return res, max_score
 
-# TODO clicking q key does not work. the app stays in actions_invoke please check control flow
+# TODO (need to test)clicking q key does not work. the app stays in actions_invoke please check control flow
+
+
 def detect():
     global sess
     global label_lines
@@ -137,7 +139,10 @@ def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
     app_pref5 = pref5
 
 
-if __name__ == '__main__':
-    detect()
-    predict()
+def get_res_score():
+    return res,score
+
+# if __name__ == '__main__':
+#     detect()
+#     predict()
 

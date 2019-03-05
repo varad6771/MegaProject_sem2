@@ -1,0 +1,19 @@
+Welcome to help Section!
+
+The ideal flow of this application is 
+
+1) New user Registeration
+
+1) user Registers and logs in 2) user sets his preferences for various apps
+in Settings & saves it 3) Now user is ready to use this application.
+
+2) Registered  Users
+1) user logs in 2) user can run app or modify settings 3) user reselects all
+the preferences for apps and then saves those. 3) If he does'nt update the 
+password the current one will be carried forward
+
+3) Resetting the User
+1) user logs in 2) user selects settings page 3) now user resets the settings.
+4) User has to set new preferences before logging out of the app else 
+he will not be able to log in again. 
+

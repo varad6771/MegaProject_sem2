@@ -5,6 +5,7 @@ from tkinter import font as tkfont
 import createSettings as cs
 # import detection as det
 
+
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -170,22 +171,22 @@ class SettingsForm(tk.Frame):
             print("fields are empty")
             messagebox.showerror("Empty Fields", "Please fill all the fields")
         else:
-            #entry_app_var1 = self.entry_app1.get() 
-            #entry_app_var2 = self.entry_app2.get() 
-            #entry_app_var3 = self.entry_app3.get() 
-            #entry_app_var4 = self.entry_app4.get() 
-            #entry_app_var5 = self.entry_app5.get() 
+            # entry_app_var1 = self.entry_app1.get()
+            # entry_app_var2 = self.entry_app2.get()
+            # entry_app_var3 = self.entry_app3.get()
+            # entry_app_var4 = self.entry_app4.get()
+            # entry_app_var5 = self.entry_app5.get()
             global entry_passwd_var6
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
             input_uname = self.controller.app_data["Username"].get()
             input_pwd = self.controller.app_data["password"].get()
-            #print(input_pwd)
+            # print(input_pwd)
 
             if cs.check_empty(entry_passwd_var6) is True:
                 entry_passwd_var6 = input_pwd
-                #print("in check_empty")
-                #print(entry_passwd_var6)
+                # print("in check_empty")
+                # print(entry_passwd_var6)
             else:
                 entry_passwd_var6 = self.entry_password_settingsui.get()
 
@@ -229,9 +230,9 @@ class SettingsForm(tk.Frame):
         print("reset file name " + in_file)
 
         if cs.file_reset(in_file) is True:
-            messagebox.showinfo("Succesful Reset", "Settings Reset Success!! Please enter new settings")
+            messagebox.showinfo("Succesful Reset", "Settings Reseted!! Please enter new settings before logging out ")
         else:
-            messagebox.showerror("Reset Fail", "Settings Reset Failed")
+            messagebox.showerror("Reset Fail", "Settings Reset Failed. Please try again")
 
     def reload_app_func(self):
         varchck = self.entry_app1.get()
