@@ -1,9 +1,10 @@
 import tkinter as tk
+import createSettings as cs
+import detection as det
+
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font as tkfont
-import createSettings as cs
-# import detection as det
 
 
 class LoginForm(tk.Frame):
@@ -43,34 +44,6 @@ class LoginForm(tk.Frame):
                     input_uname = self.entry_username.delete(0, tk.END)
                     input_pwd = self.entry_password.delete(0, tk.END)
 
-    def register_func(self):
-        print("in register_func")
-        uname_val = self.entry_username.get()
-        pwd_val = self.entry_password.get()
-        in_file = uname_val + ".json"
-
-        ciphertext_input = cs.encrypt(pwd_val)
-
-        if cs.file_existence(in_file) is False:
-            print("file does not exist so write settings")
-            if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc",
-                                                          "abc")
-                print("register successful file created  " + created_settings_file)
-                messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
-                self.entry_username.delete(0, tk.END)
-                self.entry_password.delete(0, tk.END)
-
-            else:
-                messagebox.showerror("Empty Credentials", "Credential cannot be empty!! Please fill all the fields")
-        else:
-            input_data = cs.read_settings(in_file)
-            for settings_data_file in input_data['Settings']:
-                if settings_data_file['name'] == uname_val:
-                    print("data exist! you cannot re-register")
-                    messagebox.showerror("Error", "User Already Exists!! You cannot Re-Register")
-                    break
-
     def clear_func(self):
         print("in clear func")
         self.entry_username.delete(0, tk.END)
@@ -94,13 +67,74 @@ class LoginForm(tk.Frame):
         loginbtn = tk.Button(self, text="Login", command=self.login_func)
         loginbtn.grid(row=2, column=0)
 
-        registerbtn = tk.Button(self, text="Register", command=self.register_func)
+        registerbtn = tk.Button(self, text="Registration", command=lambda: controller.show_frame("RegisterForm"))
         registerbtn.grid(row=2, column=1)
 
         clearbtn = tk.Button(self, text="Clear", command=self.clear_func)
         clearbtn.grid(row=2, column=2)
 
         self.pack()
+
+
+class RegisterForm(tk.Frame):
+    
+    def register_func(self):
+        print("in register_func")
+        uname_val = self.entry_username.get()
+        pwd_val = self.entry_password.get()
+        pwd_re_val = self.entry_password_reenter.get()
+
+        if cs.check_empty(pwd_re_val) is True:
+            messagebox.showerror("Empty Credentials", "Please fill all the fields")
+        elif pwd_re_val != pwd_val:
+            messagebox.showerror("Password do not match", "Please enter same password")
+        else:
+            in_file = uname_val + ".json"
+            ciphertext_input = cs.encrypt(pwd_val)
+            if cs.file_existence(in_file) is False:
+                print("file does not exist so write settings")
+                if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
+                    created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc",
+                                                              "abc")
+                    print("register successful file created  " + created_settings_file)
+                    messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
+                    self.entry_username.delete(0, tk.END)
+                    self.entry_password.delete(0, tk.END)
+                    self.entry_password_reenter.delete(0, tk.END)
+                else:
+                    messagebox.showerror("Empty Credentials", "Please fill all the fields")
+            else:
+                input_data = cs.read_settings(in_file)
+                for settings_data_file in input_data['Settings']:
+                    if settings_data_file['name'] == uname_val:
+                        print("data exist! you cannot re-register")
+                        messagebox.showerror("Error", "User Already Exists!! You cannot Re-Register")
+                        break
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        self.label_username = tk.Label(self, text="Username")
+        self.label_password = tk.Label(self, text="Password")
+        self.label_password_reenter = tk.Label(self, text="Re enter Password")
+
+        self.entry_username = tk.Entry(self)
+        self.entry_password = tk.Entry(self, show="*")
+        self.entry_password_reenter = tk.Entry(self, show="*")
+
+        self.label_username.grid(row=0)
+        self.label_password.grid(row=1)
+        self.label_password_reenter.grid(row=2)
+        self.entry_username.grid(row=0, column=1)
+        self.entry_password.grid(row=1, column=1)
+        self.entry_password_reenter.grid(row=2, column=1)
+
+        registerbtn = tk.Button(self, text="Register", command=self.register_func)
+        registerbtn.grid(row=3, column=1)
+
+        loginbtn = tk.Button(self, text="Login", command=lambda: controller.show_frame("LoginForm"))
+        loginbtn.grid(row=3)
 
 
 class DashboardForm(tk.Frame):
@@ -112,9 +146,9 @@ class DashboardForm(tk.Frame):
         app3_dbf = self.controller.app_data["app_3"].get()
         app4_dbf = self.controller.app_data["app_4"].get()
         app5_dbf = self.controller.app_data["app_5"].get()
-        # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
-        # det.detect()
-        # det.predict()
+        det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
+        det.detect()
+        det.predict()
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -344,7 +378,7 @@ class StartApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm):
+        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm, RegisterForm):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame

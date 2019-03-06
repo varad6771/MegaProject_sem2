@@ -1,6 +1,9 @@
 ## Remaining Tasks
 - ### Main Application
     - create a exe file of complete project
+    - UI styling
+    - Register page & validation
+    - invoke app & counter for invoke (shadab)
 ## Done
 - ### UI
     - file chooser of selecting exe's

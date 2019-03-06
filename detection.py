@@ -140,9 +140,4 @@ def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
 
 
 def get_res_score():
-    return res,score
-
-# if __name__ == '__main__':
-#     detect()
-#     predict()
-
+    return res, score
