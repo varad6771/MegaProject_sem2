@@ -94,8 +94,7 @@ class RegisterForm(tk.Frame):
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
                 if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                    created_settings_file = cs.write_settings(uname_val, ciphertext_input, "abc", "abc", "abc", "abc",
-                                                              "abc")
+                    created_settings_file = cs.write_settings(uname_val, ciphertext_input,"abc@gmail.com", "abc", "abc", "abc", "abc", "abc")
                     print("register successful file created  " + created_settings_file)
                     messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
                     self.entry_username.delete(0, tk.END)
@@ -283,11 +282,11 @@ class SettingsForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.label_app1 = tk.Label(self, text="Application 1")
-        self.label_app2 = tk.Label(self, text="Application 2")
-        self.label_app3 = tk.Label(self, text="Application 3")
-        self.label_app4 = tk.Label(self, text="Application 4")
-        self.label_app5 = tk.Label(self, text="Application 5")
+        self.label_app1 = tk.Label(self, text="Gesture Fist")
+        self.label_app2 = tk.Label(self, text="Gesture 1")
+        self.label_app3 = tk.Label(self, text="Gesture 2")
+        self.label_app4 = tk.Label(self, text="Gesture 3")
+        self.label_app5 = tk.Label(self, text="Gesture 4")
         self.label_uname = tk.Label(self, text="Username")
         self.label_uname_display = tk.Label(self, text="val_uname")
         self.label_password_settingsui = tk.Label(self, text="Password")
@@ -359,6 +358,7 @@ class StartApp(tk.Tk):
         self.app_data = {
             "Username": tk.StringVar(),
             "password": tk.StringVar(),
+            "email": tk.StringVar(),
             "in_file": tk.StringVar(),
             "app_1": tk.StringVar(),
             "app_2": tk.StringVar(),

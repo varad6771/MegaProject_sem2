@@ -8,11 +8,12 @@ uname = ""
 pwd = ""
 
 
-def write_settings(input_name, input_password, app1, app2, app3, app4, app5):
+def write_settings(input_name, input_password, email, app1, app2, app3, app4, app5):
     """
     writes settings to file in json format
         :param input_name: 
         :param input_password: 
+        :param email:
         :param app1: 
         :param app2: 
         :param app3:
@@ -25,6 +26,7 @@ def write_settings(input_name, input_password, app1, app2, app3, app4, app5):
     data['Settings'].append({
         'name': input_name,
         'password': input_password,
+        'email': email,
         'app1': app1,
         'app2': app2,
         'app3': app3,
@@ -77,6 +79,10 @@ def file_reset(in_fname):
 
 
 def read_help_file():
+    """
+    Reads help content from file "data.txt"
+        @return array:
+    """
     file_data = open('data.txt', 'r')
     help_data = file_data.read()  # type: str
     return help_data
