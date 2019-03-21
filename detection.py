@@ -27,8 +27,6 @@ def predict(image_data):
             res = human_string
     return res, max_score
 
-# TODO (need to test)clicking q key does not work. the app stays in actions_invoke please check control flow
-
 
 def detect():
     global sess
@@ -117,16 +115,62 @@ def detect():
 
 
 def actions_invoke(res, score):
-    print("in actions_invoke")
-
-    if score >= 0.6 and res == "fist":
-        print("rest of the functions")
+    global fist,two,three,four,five
+    if score >= 0.6 and res == "fist": 
+        fist = fist+1
+        two = 0
+        three = 0
+        four = 0
+        five = 0        
+        print("{} fist".format(fist))
+        if(fist == 3):
+            print("{} Invoked".format(app_pref1))
+            os.startfile(app_pref1)
+            fist = 0
     elif score >= 0.6 and res == "two":
-        print("in action for two")
+        two = two+1
+        fist = 0
+        three = 0
+        four = 0
+        five = 0
+        print("{} two".format(two))
+        if(two == 3):
+            print("{} invoked".format(app_pref2))
+            os.startfile(app_pref2)
+            two = 0
     elif score >= 0.6 and res == "three":
-        print("in action for three")
+        three = three+1
+        fist = 0
+        two = 0
+        four = 0
+        five = 0
+        print("{} three".format(three))
+        if(three == 3):
+            print("{} invoked".format(app_pref3))
+            os.startfile(app_pref3)
+            three = 0
     elif score >= 0.6 and res == "four":
-        print("in action for four")
+        four = four+1
+        fist = 0
+        two = 0
+        three = 0
+        five = 0
+        print("{} four".format(four))
+        if(four == 3):
+            print("{} invoked".format(app_pref4))
+            os.startfile(app_pref4)
+            four = 0
+    elif score >= 0.6 and res == "five":
+        five = five+1
+        fist = 0
+        two = 0
+        three = 0
+        four = 0
+        print("{} five".format(five))
+        if(five == 3):
+            print("{} invoked".format(app_pref5))
+            os.startfile(app_pref5)
+            five = 0
 
 
 def get_user_prefs(pref1, pref2, pref3, pref4, pref5):

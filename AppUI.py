@@ -83,6 +83,7 @@ class RegisterForm(tk.Frame):
         uname_val = self.entry_username.get()
         pwd_val = self.entry_password.get()
         pwd_re_val = self.entry_password_reenter.get()
+        email_val = self.entry_email.get()
 
         if cs.check_empty(pwd_re_val) is True:
             messagebox.showerror("Empty Credentials", "Please fill all the fields")
@@ -94,12 +95,14 @@ class RegisterForm(tk.Frame):
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
                 if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                    created_settings_file = cs.write_settings(uname_val, ciphertext_input,"abc@gmail.com", "abc", "abc", "abc", "abc", "abc")
+                    created_settings_file = cs.write_settings(uname_val, ciphertext_input, email_val, "abc", "abc", "abc", "abc", "abc")
                     print("register successful file created  " + created_settings_file)
                     messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
+                    self.controller.app_data["email"].set(email_val)
                     self.entry_username.delete(0, tk.END)
                     self.entry_password.delete(0, tk.END)
                     self.entry_password_reenter.delete(0, tk.END)
+                    self.entry_email.delete(0, tk.END)
                 else:
                     messagebox.showerror("Empty Credentials", "Please fill all the fields")
             else:
@@ -117,23 +120,27 @@ class RegisterForm(tk.Frame):
         self.label_username = tk.Label(self, text="Username")
         self.label_password = tk.Label(self, text="Password")
         self.label_password_reenter = tk.Label(self, text="Re enter Password")
+        self.label_email = tk.Label(self, text="Email Id")
 
         self.entry_username = tk.Entry(self)
         self.entry_password = tk.Entry(self, show="*")
         self.entry_password_reenter = tk.Entry(self, show="*")
+        self.entry_email = tk.Entry(self)
 
         self.label_username.grid(row=0)
         self.label_password.grid(row=1)
         self.label_password_reenter.grid(row=2)
+        self.label_email.grid(row=3)
         self.entry_username.grid(row=0, column=1)
         self.entry_password.grid(row=1, column=1)
         self.entry_password_reenter.grid(row=2, column=1)
+        self.entry_email.grid(row=3, column=1)
 
         registerbtn = tk.Button(self, text="Register", command=self.register_func)
-        registerbtn.grid(row=3, column=1)
+        registerbtn.grid(row=4, column=1)
 
-        loginbtn = tk.Button(self, text="Login", command=lambda: controller.show_frame("LoginForm"))
-        loginbtn.grid(row=3)
+        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("LoginForm"))
+        backbtn.grid(row=4)
 
 
 class DashboardForm(tk.Frame):
@@ -214,6 +221,7 @@ class SettingsForm(tk.Frame):
 
             input_uname = self.controller.app_data["Username"].get()
             input_pwd = self.controller.app_data["password"].get()
+            email_val_inserted = self.controller.app_data["email"].get()
             # print(input_pwd)
 
             if cs.check_empty(entry_passwd_var6) is True:
@@ -227,7 +235,7 @@ class SettingsForm(tk.Frame):
                     entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
                     entry_app_var5) is False:
                 ciphertext_input = cs.encrypt(entry_passwd_var6)
-                created_settings_file = cs.write_settings(input_uname, ciphertext_input, entry_app_var1, entry_app_var2,
+                created_settings_file = cs.write_settings(input_uname, ciphertext_input, email_val_inserted, entry_app_var1, entry_app_var2,
                                                           entry_app_var3, entry_app_var4, entry_app_var5)
             else:
                 messagebox.showerror("Empty Fields", "Please fill all the fields")
@@ -283,10 +291,10 @@ class SettingsForm(tk.Frame):
         self.controller = controller
 
         self.label_app1 = tk.Label(self, text="Gesture Fist")
-        self.label_app2 = tk.Label(self, text="Gesture 1")
-        self.label_app3 = tk.Label(self, text="Gesture 2")
-        self.label_app4 = tk.Label(self, text="Gesture 3")
-        self.label_app5 = tk.Label(self, text="Gesture 4")
+        self.label_app2 = tk.Label(self, text="Gesture one")
+        self.label_app3 = tk.Label(self, text="Gesture two")
+        self.label_app4 = tk.Label(self, text="Gesture three")
+        self.label_app5 = tk.Label(self, text="Gesture four")
         self.label_uname = tk.Label(self, text="Username")
         self.label_uname_display = tk.Label(self, text="val_uname")
         self.label_password_settingsui = tk.Label(self, text="Password")
