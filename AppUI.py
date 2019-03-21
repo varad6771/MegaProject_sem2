@@ -83,7 +83,7 @@ class RegisterForm(tk.Frame):
         uname_val = self.entry_username.get()
         pwd_val = self.entry_password.get()
         pwd_re_val = self.entry_password_reenter.get()
-        email_val = self.entry_email.get()
+        name_val = self.entry_name.get()
 
         if cs.check_empty(pwd_re_val) is True:
             messagebox.showerror("Empty Credentials", "Please fill all the fields")
@@ -95,14 +95,14 @@ class RegisterForm(tk.Frame):
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
                 if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                    created_settings_file = cs.write_settings(uname_val, ciphertext_input, email_val, "abc", "abc", "abc", "abc", "abc")
+                    created_settings_file = cs.write_settings(uname_val, ciphertext_input, name_val, "abc", "abc", "abc", "abc", "abc")
                     print("register successful file created  " + created_settings_file)
                     messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
-                    self.controller.app_data["email"].set(email_val)
+                    self.controller.app_data["name"].set(name_val)
                     self.entry_username.delete(0, tk.END)
                     self.entry_password.delete(0, tk.END)
                     self.entry_password_reenter.delete(0, tk.END)
-                    self.entry_email.delete(0, tk.END)
+                    self.entry_name.delete(0, tk.END)
                 else:
                     messagebox.showerror("Empty Credentials", "Please fill all the fields")
             else:
@@ -120,21 +120,21 @@ class RegisterForm(tk.Frame):
         self.label_username = tk.Label(self, text="Username")
         self.label_password = tk.Label(self, text="Password")
         self.label_password_reenter = tk.Label(self, text="Re-enter Password")
-        self.label_email = tk.Label(self, text="Email Id")
+        self.label_name = tk.Label(self, text="Full Name")
 
         self.entry_username = tk.Entry(self)
         self.entry_password = tk.Entry(self, show="*")
         self.entry_password_reenter = tk.Entry(self, show="*")
-        self.entry_email = tk.Entry(self)
+        self.entry_name = tk.Entry(self)
 
         self.label_username.place(x=50,y=50)
         self.label_password.place(x=50,y=100)
         self.label_password_reenter.place(x=50,y=150)
-        self.label_email.place(x=50,y=200)
+        self.label_name.place(x=50,y=200)
         self.entry_username.place(x=180,y=50)
         self.entry_password.place(x=180,y=100)
         self.entry_password_reenter.place(x=180,y=150)
-        self.entry_email.place(x=180,y=200)
+        self.entry_name.place(x=180,y=200)
 
         registerbtn = ttk.Button(self, text="Register", command=self.register_func)
         registerbtn.place(x=200,y=250)
@@ -221,7 +221,7 @@ class SettingsForm(tk.Frame):
 
             input_uname = self.controller.app_data["Username"].get()
             input_pwd = self.controller.app_data["password"].get()
-            email_val_inserted = self.controller.app_data["email"].get()
+            name_val_inserted = self.controller.app_data["name"].get()
             # print(input_pwd)
 
             if cs.check_empty(entry_passwd_var6) is True:
@@ -235,7 +235,7 @@ class SettingsForm(tk.Frame):
                     entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
                     entry_app_var5) is False:
                 ciphertext_input = cs.encrypt(entry_passwd_var6)
-                created_settings_file = cs.write_settings(input_uname, ciphertext_input, email_val_inserted, entry_app_var1, entry_app_var2,
+                created_settings_file = cs.write_settings(input_uname, ciphertext_input, name_val_inserted, entry_app_var1, entry_app_var2,
                                                           entry_app_var3, entry_app_var4, entry_app_var5)
             else:
                 messagebox.showerror("Empty Fields", "Please fill all the fields")
@@ -367,7 +367,7 @@ class StartApp(tk.Tk):
         self.app_data = {
             "Username": tk.StringVar(),
             "password": tk.StringVar(),
-            "email": tk.StringVar(),
+            "name": tk.StringVar(),
             "in_file": tk.StringVar(),
             "app_1": tk.StringVar(),
             "app_2": tk.StringVar(),
@@ -381,7 +381,7 @@ class StartApp(tk.Tk):
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = tk.Frame(self,bg='peach puff')
+        container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
