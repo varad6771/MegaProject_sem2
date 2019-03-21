@@ -27,6 +27,8 @@ def predict(image_data):
             res = human_string
     return res, max_score
 
+# TODO (need to test)clicking q key does not work. the app stays in actions_invoke please check control flow
+
 
 def detect():
     global sess
@@ -35,7 +37,11 @@ def detect():
     global res
     global score
     global frame
-
+    global fist
+    global two
+    global three
+    global four
+    global five
     color = (0, 255, 0)
     label_lines = [line.rstrip() for line
                    in tf.gfile.GFile("output_labels.txt")]
@@ -47,7 +53,11 @@ def detect():
         _ = tf.import_graph_def(graph_def, name='')
 
     detection_graph, sessD = detector_utils.load_inference_graph()
-
+    fist=0
+    two=0
+    three=0
+    four=0
+    five=0
     with tf.Session() as sess:
         score_thresh = 0.60
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
@@ -88,11 +98,13 @@ def detect():
                     image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()
 
                     res, score = predict(image_data)
-                    print(res)
-                    print("score of label ", score)
+                    cv2.putText(frame, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
+                    cv2.putText(frame, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+                    #print(res)
+                    #print("score of label ", score)
 
-                    actions_invoke(res, score)
-
+                    actions_invoke(res, score)        
+                    
                     cv2.putText(frame, res, (int(left), int(top) - 5),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
@@ -117,60 +129,60 @@ def detect():
 def actions_invoke(res, score):
     global fist,two,three,four,five
     if score >= 0.6 and res == "fist": 
-        fist = fist+1
-        two = 0
-        three = 0
-        four = 0
-        five = 0        
+        fist=fist+1
+        two=0
+        three=0
+        four=0
+        five=0        
         print("{} fist".format(fist))
-        if(fist == 3):
+        if(fist==3):
             print("{} Invoked".format(app_pref1))
             os.startfile(app_pref1)
-            fist = 0
+            fist=0
     elif score >= 0.6 and res == "two":
-        two = two+1
-        fist = 0
-        three = 0
-        four = 0
-        five = 0
+        two=two+1
+        fist=0
+        three=0
+        four=0
+        five=0
         print("{} two".format(two))
-        if(two == 3):
+        if(two==3):
             print("{} invoked".format(app_pref2))
             os.startfile(app_pref2)
-            two = 0
+            two=0
     elif score >= 0.6 and res == "three":
-        three = three+1
-        fist = 0
-        two = 0
-        four = 0
-        five = 0
+        three=three+1
+        fist=0
+        two=0
+        four=0
+        five=0
         print("{} three".format(three))
-        if(three == 3):
+        if(three==3):
             print("{} invoked".format(app_pref3))
             os.startfile(app_pref3)
-            three = 0
+            three=0
     elif score >= 0.6 and res == "four":
-        four = four+1
-        fist = 0
-        two = 0
-        three = 0
-        five = 0
+        four=four+1
+        fist=0
+        two=0
+        three=0
+        five=0
         print("{} four".format(four))
-        if(four == 3):
+        if(four==3):
             print("{} invoked".format(app_pref4))
             os.startfile(app_pref4)
-            four = 0
+            four=0
     elif score >= 0.6 and res == "five":
-        five = five+1
-        fist = 0
-        two = 0
-        three = 0
-        four = 0
+        five=five+1
+        fist=0
+        two=0
+        three=0
+        four=0
         print("{} five".format(five))
-        if(five == 3):
+        if(five==3):
             print("{} invoked".format(app_pref5))
             os.startfile(app_pref5)
-            five = 0
+            five=0
 
 
 def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
@@ -184,4 +196,9 @@ def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
 
 
 def get_res_score():
-    return res, score
+    return res,score
+
+# if __name__ == '__main__':
+#     detect()
+#     predict()
+

@@ -1,11 +1,11 @@
 ## Remaining Tasks
 - ### Main Application
-    - create a exe file of complete project
     - UI styling
-    - Register page & validation
-    - invoke app & counter for invoke (shadab)
 ## Done
 - ### UI
+    - invoke app & counter for invoke (shadab)
+    - Register page & validation
+    - create a exe file of complete project
     - file chooser of selecting exe's
     - loginScreen, settingsScreen, dashboard 
     - User Register and Auth using json file

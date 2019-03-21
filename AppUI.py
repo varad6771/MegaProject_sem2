@@ -381,7 +381,7 @@ class StartApp(tk.Tk):
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = tk.Frame(self)
+        container = tk.Frame(self,bg='peach puff')
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -410,6 +410,5 @@ class StartApp(tk.Tk):
 if __name__ == "__main__":
     app = StartApp()
     app.title("Hand Gesture Recognition")
-    app.geometry('400x400')
-    
+    app.geometry('500x500')
     app.mainloop()
