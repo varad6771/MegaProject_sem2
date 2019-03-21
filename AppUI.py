@@ -154,7 +154,7 @@ class DashboardForm(tk.Frame):
         app5_dbf = self.controller.app_data["app_5"].get()
         det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
         det.detect()
-        det.predict()
+        #det.predict()
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
