@@ -291,10 +291,10 @@ class SettingsForm(tk.Frame):
         self.controller = controller
 
         self.label_app1 = tk.Label(self, text="Gesture Fist")
-        self.label_app2 = tk.Label(self, text="Gesture one")
-        self.label_app3 = tk.Label(self, text="Gesture two")
-        self.label_app4 = tk.Label(self, text="Gesture three")
-        self.label_app5 = tk.Label(self, text="Gesture four")
+        self.label_app2 = tk.Label(self, text="Gesture two")
+        self.label_app3 = tk.Label(self, text="Gesture three")
+        self.label_app4 = tk.Label(self, text="Gesture four")
+        self.label_app5 = tk.Label(self, text="Gesture five")
         self.label_uname = tk.Label(self, text="Username")
         self.label_uname_display = tk.Label(self, text="val_uname")
         self.label_password_settingsui = tk.Label(self, text="Password")
@@ -332,17 +332,17 @@ class SettingsForm(tk.Frame):
         backbtn.place(x=270,y=330)
 
         sel_app1btn = ttk.Button(self, text="Select", command=self.sel_app1_func)
-        sel_app1btn.place(x=280,y=30)
+        sel_app1btn.place(x=290,y=30)
         sel_app2btn = ttk.Button(self, text="Select", command=self.sel_app2_func)
-        sel_app2btn.place(x=280,y=70)
+        sel_app2btn.place(x=290,y=70)
         sel_app3btn = ttk.Button(self, text="Select", command=self.sel_app3_func)
-        sel_app3btn.place(x=280,y=110)
+        sel_app3btn.place(x=290,y=110)
         sel_app4tn = ttk.Button(self, text="Select", command=self.sel_app4_func)
-        sel_app4tn.place(x=280,y=150)
+        sel_app4tn.place(x=290,y=150)
         sel_app5tn = ttk.Button(self, text="Select", command=self.sel_app5_func)
-        sel_app5tn.place(x=280,y=190)
+        sel_app5tn.place(x=290,y=190)
         reload_appbtn = ttk.Button(self, text="Reload", command=self.reload_app_func)
-        reload_appbtn.place(x=280,y=250)
+        reload_appbtn.place(x=290,y=230)
 
 
 class HelpForm(tk.Frame):
