@@ -5,7 +5,7 @@ import detection as det
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import font as tkfont
-
+from tkinter import ttk
 
 class LoginForm(tk.Frame):
 
@@ -51,27 +51,27 @@ class LoginForm(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        
         self.controller = controller
-
-        self.label_username = tk.Label(self, text="Username")
-        self.label_password = tk.Label(self, text="Password")
+        
+        self.label_username = ttk.Label(self, text="Username")
+        self.label_password = ttk.Label(self, text="Password")
 
         self.entry_username = tk.Entry(self)
         self.entry_password = tk.Entry(self, show="*")
 
-        self.label_username.grid(row=0)
-        self.label_password.grid(row=1)
-        self.entry_username.grid(row=0, column=1)
-        self.entry_password.grid(row=1, column=1)
+        self.label_username.place(x=100,y=120)
+        self.label_password.place(x=100,y=170)
+        self.entry_username.place(x=180,y=120)
+        self.entry_password.place(x=180,y=170)
 
-        loginbtn = tk.Button(self, text="Login", command=self.login_func)
-        loginbtn.grid(row=2, column=0)
-
-        registerbtn = tk.Button(self, text="Registration", command=lambda: controller.show_frame("RegisterForm"))
-        registerbtn.grid(row=2, column=1)
-
-        clearbtn = tk.Button(self, text="Clear", command=self.clear_func)
-        clearbtn.grid(row=2, column=2)
+        loginbtn = ttk.Button(self, text="Login", command=self.login_func)
+        loginbtn.place(x=80,y=220)
+        registerbtn = ttk.Button(self, text="Registration", command=lambda: controller.show_frame("RegisterForm"))
+        registerbtn.place(x=180,y=220)
+        
+        clearbtn = ttk.Button(self, text="Clear", command=self.clear_func)
+        clearbtn.place(x=280,y=220)
 
         self.pack()
 
@@ -119,7 +119,7 @@ class RegisterForm(tk.Frame):
 
         self.label_username = tk.Label(self, text="Username")
         self.label_password = tk.Label(self, text="Password")
-        self.label_password_reenter = tk.Label(self, text="Re enter Password")
+        self.label_password_reenter = tk.Label(self, text="Re-enter Password")
         self.label_email = tk.Label(self, text="Email Id")
 
         self.entry_username = tk.Entry(self)
@@ -127,20 +127,20 @@ class RegisterForm(tk.Frame):
         self.entry_password_reenter = tk.Entry(self, show="*")
         self.entry_email = tk.Entry(self)
 
-        self.label_username.grid(row=0)
-        self.label_password.grid(row=1)
-        self.label_password_reenter.grid(row=2)
-        self.label_email.grid(row=3)
-        self.entry_username.grid(row=0, column=1)
-        self.entry_password.grid(row=1, column=1)
-        self.entry_password_reenter.grid(row=2, column=1)
-        self.entry_email.grid(row=3, column=1)
+        self.label_username.place(x=50,y=50)
+        self.label_password.place(x=50,y=100)
+        self.label_password_reenter.place(x=50,y=150)
+        self.label_email.place(x=50,y=200)
+        self.entry_username.place(x=180,y=50)
+        self.entry_password.place(x=180,y=100)
+        self.entry_password_reenter.place(x=180,y=150)
+        self.entry_email.place(x=180,y=200)
 
-        registerbtn = tk.Button(self, text="Register", command=self.register_func)
-        registerbtn.grid(row=4, column=1)
+        registerbtn = ttk.Button(self, text="Register", command=self.register_func)
+        registerbtn.place(x=200,y=250)
 
-        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("LoginForm"))
-        backbtn.grid(row=4)
+        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("LoginForm"))
+        backbtn.place(x=100,y=250)
 
 
 class DashboardForm(tk.Frame):
@@ -160,14 +160,14 @@ class DashboardForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        runappbtn = tk.Button(self, text="Run app", command=self.runapp_func)
-        runappbtn.grid(row=1, column=0)
+        runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
+        runappbtn.place(x=160,y=100)
 
-        settingsbtn = tk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
-        settingsbtn.grid(row=1, column=1)
+        settingsbtn = ttk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
+        settingsbtn.place(x=157,y=160)
 
-        helpbtn = tk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
-        helpbtn.grid(row=1, column=2)
+        helpbtn = ttk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
+        helpbtn.place(x=160,y=220)
 
 
 class SettingsForm(tk.Frame):
@@ -306,43 +306,43 @@ class SettingsForm(tk.Frame):
         self.entry_app5 = tk.Entry(self)
         self.entry_password_settingsui = tk.Entry(self, show="*")
 
-        self.label_app1.grid(row=0)
-        self.label_app2.grid(row=1)
-        self.label_app3.grid(row=2)
-        self.label_app4.grid(row=3)
-        self.label_app5.grid(row=4)
-        self.label_uname.grid(row=5)
-        self.label_uname_display.grid(row=5, column=1)
-        self.label_password_settingsui.grid(row=6)
+        self.label_app1.place(x=30,y=30)
+        self.label_app2.place(x=30,y=70)
+        self.label_app3.place(x=30,y=110)
+        self.label_app4.place(x=30,y=150)
+        self.label_app5.place(x=30,y=190)
+        self.label_uname.place(x=30,y=230)
+        self.label_uname_display.place(x=150,y=230)
+        self.label_password_settingsui.place(x=30,y=270)
 
-        self.entry_app1.grid(row=0, column=1)
-        self.entry_app2.grid(row=1, column=1)
-        self.entry_app3.grid(row=2, column=1)
-        self.entry_app4.grid(row=3, column=1)
-        self.entry_app5.grid(row=4, column=1)
-        self.entry_password_settingsui.grid(row=6, column=1)
+        self.entry_app1.place(x=120,y=30)
+        self.entry_app2.place(x=120,y=70)
+        self.entry_app3.place(x=120,y=110)
+        self.entry_app4.place(x=120,y=150)
+        self.entry_app5.place(x=120,y=190)
+        self.entry_password_settingsui.place(x=120,y=270)
 
-        resetbtn = tk.Button(self, text="Reset", command=self.reset_func)
-        resetbtn.grid(row=7, column=0)
+        resetbtn = ttk.Button(self, text="Reset", command=self.reset_func)
+        resetbtn.place(x=70,y=330)
 
-        savebtn = tk.Button(self, text="Save", command=self.save_func)
-        savebtn.grid(row=7, column=1)
+        savebtn = ttk.Button(self, text="Save", command=self.save_func)
+        savebtn.place(x=170,y=330)
 
-        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.grid(row=7, column=2)
+        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
+        backbtn.place(x=270,y=330)
 
-        sel_app1btn = tk.Button(self, text="Select", command=self.sel_app1_func)
-        sel_app1btn.grid(row=0, column=2)
-        sel_app2btn = tk.Button(self, text="Select", command=self.sel_app2_func)
-        sel_app2btn.grid(row=1, column=2)
-        sel_app3btn = tk.Button(self, text="Select", command=self.sel_app3_func)
-        sel_app3btn.grid(row=2, column=2)
-        sel_app4tn = tk.Button(self, text="Select", command=self.sel_app4_func)
-        sel_app4tn.grid(row=3, column=2)
-        sel_app5tn = tk.Button(self, text="Select", command=self.sel_app5_func)
-        sel_app5tn.grid(row=4, column=2)
-        reload_appbtn = tk.Button(self, text="Reload", command=self.reload_app_func)
-        reload_appbtn.grid(row=5, column=2)
+        sel_app1btn = ttk.Button(self, text="Select", command=self.sel_app1_func)
+        sel_app1btn.place(x=280,y=30)
+        sel_app2btn = ttk.Button(self, text="Select", command=self.sel_app2_func)
+        sel_app2btn.place(x=280,y=70)
+        sel_app3btn = ttk.Button(self, text="Select", command=self.sel_app3_func)
+        sel_app3btn.place(x=280,y=110)
+        sel_app4tn = ttk.Button(self, text="Select", command=self.sel_app4_func)
+        sel_app4tn.place(x=280,y=150)
+        sel_app5tn = ttk.Button(self, text="Select", command=self.sel_app5_func)
+        sel_app5tn.place(x=280,y=190)
+        reload_appbtn = ttk.Button(self, text="Reload", command=self.reload_app_func)
+        reload_appbtn.place(x=280,y=250)
 
 
 class HelpForm(tk.Frame):
@@ -350,7 +350,7 @@ class HelpForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        backbtn = tk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
+        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
         backbtn.grid()
 
         help_data = cs.read_help_file()
@@ -363,6 +363,7 @@ class StartApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        
         self.app_data = {
             "Username": tk.StringVar(),
             "password": tk.StringVar(),
@@ -408,5 +409,7 @@ class StartApp(tk.Tk):
 
 if __name__ == "__main__":
     app = StartApp()
-    app.title("My app")
+    app.title("Hand Gesture Recognition")
+    app.geometry('400x400')
+    
     app.mainloop()
