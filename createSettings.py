@@ -38,7 +38,7 @@ def write_patient_settings(input_name, app1, app2, app3, app4, app5):
     return out_fname
 
 
-def write_doc_settings(input_name, input_password, speciality):
+def write_doc_settings(input_name, input_password, speciality, path):
     """
     writes settings to file in json format
         :param input_name: 
@@ -54,13 +54,31 @@ def write_doc_settings(input_name, input_password, speciality):
         'speciality' : speciality,
     })
 
-    out_fname = input_name+".json" 
-
+    out_fname = path+"/"+input_name+".json" 
+    print(out_fname)
     with open(out_fname, 'w') as outfile:
         json.dump(data, outfile) 
 
     return out_fname
 
+
+def create_doc_dir(input_dname, input_pname, status):
+    path = os.getcwd()
+
+    if status is True:
+        # print("in if")
+        path = path+"/"+input_dname;
+        os.mkdir(path)
+    elif status is False:
+        # print("in else")
+        path = path+"/"+input_dname+"/"+input_pname
+        if not os.path.exists(path):
+            os.makedirs(path)
+        else:
+            print("error")
+    
+    return path
+    
 
 def read_settings(in_fname):
     """
@@ -160,3 +178,14 @@ def check_empty(field_val):
         return True
 
     return False
+
+
+def get_path():
+    return (os.getcwd())
+
+# if __name__ == '__main__':
+#     path = create_doc_dir('varad','pname1',True)
+#     filename = write_doc_settings("varad","abcd","bones",path)
+#     print(file_existence(filename))
+#     file_reset(filename)
+#     print(file_existence(filename))

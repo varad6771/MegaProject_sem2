@@ -15,7 +15,8 @@ class LoginForm(tk.Frame):
         input_pwd = self.entry_password.get()
 
         in_file = input_uname + ".json"
-
+        path = cs.get_path()
+        in_file = in_file = path+"/"+in_file
         if cs.file_existence(in_file) is False:
             print("file does not exist so login fail")
             messagebox.showerror("Login Fail", "User does not Exist")
@@ -25,6 +26,7 @@ class LoginForm(tk.Frame):
             self.controller.app_data["Username"].set(input_uname)
             self.controller.app_data["in_file"].set(in_file) 
             self.controller.app_data["password"].set(input_pwd)
+            self.controller.app_data["doc_path"].set(path)
             
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
@@ -89,10 +91,12 @@ class RegisterForm(tk.Frame):
         else:
             in_file = uname_val + ".json"
             ciphertext_input = cs.encrypt(pwd_val)
+            path = cs.get_path()
+            in_file = path+"/"+in_file
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
                 if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                    created_settings_file = cs.write_doc_settings(uname_val, ciphertext_input,speciality_val)
+                    created_settings_file = cs.write_doc_settings(uname_val, ciphertext_input,speciality_val, path)
                     print("register successful file created  " + created_settings_file)
                     messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
                     self.entry_username.delete(0, tk.END)
@@ -165,6 +169,21 @@ class DashboardForm(tk.Frame):
         helpbtn.place(x=160, y=220)
 
 
+class HelpForm(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
+        backbtn.grid()
+
+        help_data = cs.read_help_file()
+        text = tk.Text(self)
+        text.insert(tk.END, help_data)
+        text.grid(row=2, column=0)
+
+
 class SettingsForm(tk.Frame):
 
     def save_func(self):
@@ -179,6 +198,7 @@ class SettingsForm(tk.Frame):
         input_uname = self.controller.app_data["Username"].get()
         input_pwd = self.controller.app_data["password"].get()
         speciality_val = self.controller.app_data["speciality"].get()
+        path_val = self.controller.app_data["doc_path"].get()
 
         if cs.check_empty(entry_passwd_var6) is True:
             entry_passwd_var6 = input_pwd
@@ -190,8 +210,9 @@ class SettingsForm(tk.Frame):
         else:
             entry_speciality_val = self.entry_speciality_settingsui.get()
         
+        
         ciphertext_input = cs.encrypt(entry_passwd_var6)
-        created_settings_file = cs.write_doc_settings(input_uname, ciphertext_input, entry_speciality_val)
+        created_settings_file = cs.write_doc_settings(input_uname, ciphertext_input, entry_speciality_val, path_val)
 
         if cs.file_existence(created_settings_file) is True:
             self.controller.app_data["password"].set(entry_passwd_var6)
@@ -210,7 +231,9 @@ class SettingsForm(tk.Frame):
 
         in_file = self.controller.app_data["in_file"].get()
         print("reset file name " + in_file)
+        path_val = self.controller.app_data["doc_path"].get()
 
+        # BUG reset also removes folder instead of just file
         if cs.file_reset(in_file) is True:
             messagebox.showinfo("Succesful Reset", "Settings Reseted!! Please enter new settings before logging out ")
         else:
@@ -225,6 +248,7 @@ class SettingsForm(tk.Frame):
         patientnameval = self.entry_patient_name.get()
         
         if cs.check_empty(patientnameval) is False:
+            self.controller.app_data["patient_name"].set(patientnameval) 
             self.controller.show_frame("PatientsForm")
         else:
             messagebox.showerror("Empty Field", "Please fill the patients name ")
@@ -270,49 +294,31 @@ class SettingsForm(tk.Frame):
         reload_appbtn.place(x=290, y=230)
 
 
-class HelpForm(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-
-        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.grid()
-
-        help_data = cs.read_help_file()
-        text = tk.Text(self)
-        text.insert(tk.END, help_data)
-        text.grid(row=2, column=0)
-
-
 class PatientsForm(tk.Frame):
-    # TODO change the entry and lable names to avoid conflicts with the settings one
+
     def sel_app1_func(self):
         global entry_app_var1
         self.entry_app1.delete(0, tk.END)
         entry_app_var1 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app1.insert(0, entry_app_var1)
-    # TODO change the entry and lable names to avoid conflicts with the settings one
 
     def sel_app2_func(self):
         global entry_app_var2
         self.entry_app2.delete(0, tk.END)
         entry_app_var2 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app2.insert(0, entry_app_var2)
-    # TODO change the entry and lable names to avoid conflicts with the settings one
 
     def sel_app3_func(self):
         global entry_app_var3
         self.entry_app3.delete(0, tk.END)
         entry_app_var3 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app3.insert(0, entry_app_var3)
-    # TODO change the entry and lable names to avoid conflicts with the settings one
 
     def sel_app4_func(self):
         global entry_app_var4
         self.entry_app4.delete(0, tk.END)
         entry_app_var4 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app4.insert(0, entry_app_var4)
-    # TODO change the entry and lable names to avoid conflicts with the settings one
 
     def sel_app5_func(self):
         global entry_app_var5
@@ -320,16 +326,14 @@ class PatientsForm(tk.Frame):
         entry_app_var5 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app5.insert(0, entry_app_var5)
 
-
     def save_func(self):
         print("in save_func")
         
-
     def reset_func(self):
         print("in reset_func")
 
-
     def reload_app_func(self):
+        self.label_patient_name.config(text=self.controller.app_data["patient_name"].get())
         print("in reload func")
 
     def __init__(self, parent, controller):
@@ -341,8 +345,8 @@ class PatientsForm(tk.Frame):
         self.label_app3 = tk.Label(self, text="Gesture three")
         self.label_app4 = tk.Label(self, text="Gesture four")
         self.label_app5 = tk.Label(self, text="Gesture five")
-        self.label_uname = tk.Label(self, text="Patient Name")
-        self.label_uname_display = tk.Label(self, text="val_uname")
+        self.label_pname = tk.Label(self, text="Patient Name")
+        self.label_patient_name = tk.Label(self, text="val_uname")
 
         self.entry_app1 = tk.Entry(self)
         self.entry_app2 = tk.Entry(self)
@@ -355,8 +359,8 @@ class PatientsForm(tk.Frame):
         self.label_app3.place(x=30,y=110)
         self.label_app4.place(x=30,y=150)
         self.label_app5.place(x=30,y=190)
-        self.label_uname.place(x=30, y=230)
-        self.label_uname_display.place(x=150, y=230)
+        self.label_pname.place(x=30, y=230)
+        self.label_patient_name.place(x=150, y=230)
 
         self.entry_app1.place(x=120,y=30)
         self.entry_app2.place(x=120,y=70)
@@ -403,6 +407,9 @@ class StartApp(tk.Tk):
             "app_3": tk.StringVar(),
             "app_4": tk.StringVar(),
             "app_5": tk.StringVar(),
+            "patient_name": tk.StringVar(),
+            "doc_path": tk.StringVar(),
+            "patient_path": tk.StringVar(),
         }
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
