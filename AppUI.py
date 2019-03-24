@@ -7,6 +7,7 @@ from tkinter import filedialog
 from tkinter import font as tkfont
 from tkinter import ttk
 
+# TODO add SelectPatients field
 class LoginForm(tk.Frame):
 
     def login_func(self):
@@ -25,7 +26,6 @@ class LoginForm(tk.Frame):
             self.controller.app_data["in_file"].set(in_file) 
             self.controller.app_data["password"].set(input_pwd)
             
-
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
                 
@@ -33,11 +33,6 @@ class LoginForm(tk.Frame):
                 red_unm = data_file['name']
                 if cs.check_unm(red_unm, input_uname) is True and cs.check_pswd(red_pwd, input_pwd) is True:
                     print("login success")
-                    self.controller.app_data["app_1"].set(data_file['app1']) 
-                    self.controller.app_data["app_2"].set(data_file['app2'])
-                    self.controller.app_data["app_3"].set(data_file['app3'])
-                    self.controller.app_data["app_4"].set(data_file['app4'])
-                    self.controller.app_data["app_5"].set(data_file['app5'])
                     self.controller.app_data["speciality"].set(data_file['speciality'])
                     self.controller.show_frame("DashboardForm")
                     print("on DashboardForm1")
@@ -62,18 +57,18 @@ class LoginForm(tk.Frame):
         self.entry_username = tk.Entry(self)
         self.entry_password = tk.Entry(self, show="*")
 
-        self.label_username.place(x=100,y=120)
-        self.label_password.place(x=100,y=170)
-        self.entry_username.place(x=180,y=120)
-        self.entry_password.place(x=180,y=170)
+        self.label_username.place(x=100, y=120)
+        self.label_password.place(x=100, y=170)
+        self.entry_username.place(x=180, y=120)
+        self.entry_password.place(x=180, y=170)
 
         loginbtn = ttk.Button(self, text="Login", command=self.login_func)
-        loginbtn.place(x=80,y=220)
+        loginbtn.place(x=80, y=220)
         registerbtn = ttk.Button(self, text="Registration", command=lambda: controller.show_frame("RegisterForm"))
-        registerbtn.place(x=180,y=220)
+        registerbtn.place(x=180, y=220)
         
         clearbtn = ttk.Button(self, text="Clear", command=self.clear_func)
-        clearbtn.place(x=280,y=220)
+        clearbtn.place(x=280, y=220)
 
         self.pack()
 
@@ -85,7 +80,7 @@ class RegisterForm(tk.Frame):
         uname_val = self.entry_username.get()
         pwd_val = self.entry_password.get()
         pwd_re_val = self.entry_password_reenter.get()
-        speciality_val self.entry_speciality.get()
+        speciality_val = self.entry_speciality.get()
 
         if cs.check_empty(pwd_re_val) is True:
             messagebox.showerror("Empty Credentials", "Please fill all the fields")
@@ -97,7 +92,7 @@ class RegisterForm(tk.Frame):
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
                 if cs.check_empty(uname_val) is False and cs.check_empty(pwd_val) is False:
-                    created_settings_file = cs.write_settings(uname_val, ciphertext_input,speciality_val, "abc", "abc", "abc", "abc", "abc")
+                    created_settings_file = cs.write_doc_settings(uname_val, ciphertext_input,speciality_val)
                     print("register successful file created  " + created_settings_file)
                     messagebox.showinfo("Register Succesful", "Please set app preferences in settings")
                     self.entry_username.delete(0, tk.END)
@@ -128,20 +123,20 @@ class RegisterForm(tk.Frame):
         self.entry_password_reenter = tk.Entry(self, show="*")
         self.entry_speciality = tk.Entry(self)
 
-        self.label_username.place(x=50,y=50)
-        self.label_password.place(x=50,y=100)
-        self.label_password_reenter.place(x=50,y=150)
-        self.label_speciality.place (x=50,y=200)
-        self.entry_username.place(x=180,y=50)
-        self.entry_password.place(x=180,y=100)
-        self.entry_password_reenter.place(x=180,y=150)
+        self.label_username.place(x=50, y=50)
+        self.label_password.place(x=50, y=100)
+        self.label_password_reenter.place(x=50, y=150)
+        self.label_speciality.place (x=50, y=200)
+        self.entry_username.place(x=180, y=50)
+        self.entry_password.place(x=180, y=100)
+        self.entry_password_reenter.place(x=180, y=150)
         self.entry_speciality.place(x=180, y=200)
 
         registerbtn = ttk.Button(self, text="Register", command=self.register_func)
-        registerbtn.place(x=200,y=250)
+        registerbtn.place(x=200, y=250)
 
         backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("LoginForm"))
-        backbtn.place(x=100,y=250)
+        backbtn.place(x=100, y=250)
 
 
 class DashboardForm(tk.Frame):
@@ -153,7 +148,7 @@ class DashboardForm(tk.Frame):
         app3_dbf = self.controller.app_data["app_3"].get()
         app4_dbf = self.controller.app_data["app_4"].get()
         app5_dbf = self.controller.app_data["app_5"].get()
-        i# det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
+        # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
         # det.detect()
 
     def __init__(self, parent, controller):
@@ -161,67 +156,57 @@ class DashboardForm(tk.Frame):
         self.controller = controller
 
         runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
-        runappbtn.place(x=160,y=100)
+        runappbtn.place(x=160, y=100)
 
         settingsbtn = ttk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
-        settingsbtn.place(x=157,y=160)
+        settingsbtn.place(x=157, y=160)
 
         helpbtn = ttk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
-        helpbtn.place(x=160,y=220)
+        helpbtn.place(x=160, y=220)
 
 
 class SettingsForm(tk.Frame):
 
     def save_func(self):
         print("in save_func")
-        valp = self.entry_app1.get()
-        print(valp)
-        print(cs.check_empty(self.entry_app1.get()))
-        if cs.check_empty(self.entry_app1.get()) is True:
-            print("fields are empty")
-            messagebox.showerror("Empty Fields", "Please fill all the fields")
-        else:
    
-            global entry_passwd_var6
+        global entry_passwd_var6
+        global entry_speciality_val
+
+        entry_passwd_var6 = self.entry_password_settingsui.get()
+        entry_speciality_val = self.entry_speciality_settingsui.get()
+
+        input_uname = self.controller.app_data["Username"].get()
+        input_pwd = self.controller.app_data["password"].get()
+        speciality_val = self.controller.app_data["speciality"].get()
+
+        if cs.check_empty(entry_passwd_var6) is True:
+            entry_passwd_var6 = input_pwd
+        else:
             entry_passwd_var6 = self.entry_password_settingsui.get()
 
-            input_uname = self.controller.app_data["Username"].get()
-            input_pwd = self.controller.app_data["password"].get()
-            speciality_val = self.controller.app_data["speciality"].get()
-            # print(input_pwd)
+        if cs.check_empty(entry_speciality_val) is True:
+            entry_speciality_val = speciality_val 
+        else:
+            entry_speciality_val = self.entry_speciality_settingsui.get()
+        
+        ciphertext_input = cs.encrypt(entry_passwd_var6)
+        created_settings_file = cs.write_doc_settings(input_uname, ciphertext_input, entry_speciality_val)
 
-            if cs.check_empty(entry_passwd_var6) is True:
-                entry_passwd_var6 = input_pwd
-                # print("in check_empty")
-                # print(entry_passwd_var6)
-            else:
-                entry_passwd_var6 = self.entry_password_settingsui.get()
+        if cs.file_existence(created_settings_file) is True:
+            self.controller.app_data["password"].set(entry_passwd_var6)
+            self.controller.app_data["speciality"].set(entry_speciality_val)
 
-            if cs.check_empty(entry_app_var1) is False and cs.check_empty(entry_app_var2) is False and cs.check_empty(
-                    entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
-                    entry_app_var5) is False:
-                ciphertext_input = cs.encrypt(entry_passwd_var6)
-                created_settings_file = cs.write_settings(input_uname, ciphertext_input, speciality, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
-            else:
-                messagebox.showerror("Empty Fields", "Please fill all the fields")
-
-            if cs.file_existence(created_settings_file) is True:
-                self.controller.app_data["app_1"].set(entry_app_var1) 
-                self.controller.app_data["app_2"].set(entry_app_var2)
-                self.controller.app_data["app_3"].set(entry_app_var3)
-                self.controller.app_data["app_4"].set(entry_app_var4)
-                self.controller.app_data["app_5"].set(entry_app_var5)
-                self.controller.app_data["password"].set(entry_passwd_var6)
-                print("settings saved file name   " + created_settings_file)
-                messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
-            else:
-                messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
+            print("settings saved file name   " + created_settings_file)
+            messagebox.showinfo("Save Successful", "New Settings are Updated Successfully ")
+        else:
+            messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
 
     def reset_func(self):
         print("in reset_func")
 
-
         self.entry_password_settingsui.delete(0, tk.END)
+        self.entry_speciality_settingsui.delete(0, tk.END)
 
         in_file = self.controller.app_data["in_file"].get()
         print("reset file name " + in_file)
@@ -232,18 +217,17 @@ class SettingsForm(tk.Frame):
             messagebox.showerror("Reset Fail", "Settings Reset Failed. Please try again")
 
     def reload_app_func(self):
-        varchck = self.entry_app1.get()
         self.label_uname_display.config(text=self.controller.app_data["Username"].get())
-        
-        if cs.check_empty(varchck) is True:
-            self.entry_app1.insert(0, self.controller.app_data["app_1"].get())
-            self.entry_app2.insert(0, self.controller.app_data["app_2"].get())
-            self.entry_app3.insert(0, self.controller.app_data["app_3"].get())
-            self.entry_app4.insert(0, self.controller.app_data["app_4"].get())
-            self.entry_app5.insert(0, self.controller.app_data["app_5"].get())
+        self.entry_speciality_settingsui.insert(0, self.controller.app_data["speciality"].get())
 
     def addpatient_func(self):
         print("in add patient")
+        patientnameval = self.entry_patient_name.get()
+        
+        if cs.check_empty(patientnameval) is False:
+            self.controller.show_frame("PatientsForm")
+        else:
+            messagebox.showerror("Empty Field", "Please fill the patients name ")
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -259,33 +243,31 @@ class SettingsForm(tk.Frame):
         self.entry_patient_name = tk.Entry(self)
         self.entry_password_settingsui = tk.Entry(self, show="*")
 
+        self.label_patient_name.place(x=30, y=30)
+        self.label_uname.place(x=30, y=230)
+        self.label_uname_display.place(x=150, y=230)
+        self.label_speciality_settingsui.place(x=30, y=270)
+        self.label_password_settingsui.place(x=30, y=300)
 
-        self.label_patient_name.place(x=30,y=30)
-        self.label_uname.place(x=30,y=230)
-        self.label_uname_display.place(x=150,y=230)
-        self.label_speciality_settingsui.place(x=30,y=270)
-        self.label_password_settingsui.place(x=30,y=300)
+        self.entry_patient_name.place(x=120, y=30)
+        self.entry_speciality_settingsui.place(x=120, y=270)
+        self.entry_password_settingsui.place(x=120, y=300)
 
-        self.entry_patient_name.place(x=120,y=30)
-        self.entry_speciality_settingsui.place(x=120,y=270)
-        self.entry_password_settingsui.place(x=120,y=300)
-
-        
         addpatientbtn = ttk.Button(self, text="Add Patient", command=self.addpatient_func)
-        addpatientbtn.place(x=70,y=90)
+        addpatientbtn.place(x=70, y=90)
 
         resetbtn = ttk.Button(self, text="Reset", command=self.reset_func)
-        resetbtn.place(x=70,y=330)
+        resetbtn.place(x=70, y=330)
 
         # changes in savefunc
         savebtn = ttk.Button(self, text="Save", command=self.save_func)
-        savebtn.place(x=170,y=330)
+        savebtn.place(x=170, y=330)
 
         backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.place(x=270,y=330)
+        backbtn.place(x=270, y=330)
 
         reload_appbtn = ttk.Button(self, text="Reload", command=self.reload_app_func)
-        reload_appbtn.place(x=290,y=230)
+        reload_appbtn.place(x=290, y=230)
 
 
 class HelpForm(tk.Frame):
@@ -303,162 +285,53 @@ class HelpForm(tk.Frame):
 
 
 class PatientsForm(tk.Frame):
-# change the entry and lable names to avoid conflicts with the settings one
+    # TODO change the entry and lable names to avoid conflicts with the settings one
     def sel_app1_func(self):
         global entry_app_var1
         self.entry_app1.delete(0, tk.END)
-        entry_app_var1 = filedialog.askopenfilename(filetypes=[("all file", "*)])
+        entry_app_var1 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app1.insert(0, entry_app_var1)
-# change the entry and lable names to avoid conflicts with the settings one
+    # TODO change the entry and lable names to avoid conflicts with the settings one
+
     def sel_app2_func(self):
         global entry_app_var2
         self.entry_app2.delete(0, tk.END)
-        entry_app_var2 = filedialog.askopenfilename(filetypes=[("all file", "*)])
+        entry_app_var2 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app2.insert(0, entry_app_var2)
-# change the entry and lable names to avoid conflicts with the settings one
+    # TODO change the entry and lable names to avoid conflicts with the settings one
+
     def sel_app3_func(self):
         global entry_app_var3
         self.entry_app3.delete(0, tk.END)
-        entry_app_var3 = filedialog.askopenfilename(filetypes=[("all file", "*)])
+        entry_app_var3 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app3.insert(0, entry_app_var3)
-# change the entry and lable names to avoid conflicts with the settings one
+    # TODO change the entry and lable names to avoid conflicts with the settings one
+
     def sel_app4_func(self):
         global entry_app_var4
         self.entry_app4.delete(0, tk.END)
-        entry_app_var4 = filedialog.askopenfilename(filetypes=[("all file", "*)])
+        entry_app_var4 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app4.insert(0, entry_app_var4)
-# change the entry and lable names to avoid conflicts with the settings one
+    # TODO change the entry and lable names to avoid conflicts with the settings one
+
     def sel_app5_func(self):
         global entry_app_var5
         self.entry_app5.delete(0, tk.END)
-        entry_app_var5 = filedialog.askopenfilename(filetypes=[("all file", "*)])
+        entry_app_var5 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app5.insert(0, entry_app_var5)
 
 
-        def save_func(self):
-        print("in save_func")
-        valp = self.entry_app1.get()
-        print(valp)
-        print(cs.check_empty(self.entry_app1.get()))
-        if cs.check_empty(self.entry_app1.get()) is True:
-            print("fields are empty")
-            messagebox.showerror("Empty Fields", "Please fill all the fields")
-        else:
-   
-            global entry_passwd_var6
-            entry_passwd_var6 = self.entry_password_settingsui.get()
-
-            input_uname = self.controller.app_data["Username"].get()
-            input_pwd = self.controller.app_data["password"].get()
-            speciality_val = self.controller.app_data["speciality"].get()
-            # print(input_pwd)
-
-            if cs.check_empty(entry_passwd_var6) is True:
-                entry_passwd_var6 = input_pwd
-                # print("in check_empty")
-                # print(entry_passwd_var6)
-            else:
-                entry_passwd_var6 = self.entry_password_settingsui.get()
-
-            if cs.check_empty(entry_app_var1) is False and cs.check_empty(entry_app_var2) is False and cs.check_empty(
-                    entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
-                    entry_app_var5) is False:
-                ciphertext_input = cs.encrypt(entry_passwd_var6)
-                created_settings_file = cs.write_settings(input_uname, ciphertext_input, speciality, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
-            else:
-                messagebox.showerror("Empty Fields", "Please fill all the fields")
-
-            if cs.file_existence(created_settings_file) is True:
-                self.controller.app_data["app_1"].set(entry_app_var1) 
-                self.controller.app_data["app_2"].set(entry_app_var2)
-                self.controller.app_data["app_3"].set(entry_app_var3)
-                self.controller.app_data["app_4"].set(entry_app_var4)
-                self.controller.app_data["app_5"].set(entry_app_var5)
-                self.controller.app_data["password"].set(entry_passwd_var6)
-                print("settings saved file name   " + created_settings_file)
-                messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
-            else:
-                messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
-# change these function based upon the init of the patients page
-    def reset_func(self):
-        print("in reset_func")
-        self.entry_app1.delete(0, tk.END)
-        self.entry_app2.delete(0, tk.END)
-        self.entry_app3.delete(0, tk.END)
-        self.entry_app4.delete(0, tk.END)
-        self.entry_app5.delete(0, tk.END)
-        self.entry_password_settingsui.delete(0, tk.END)
-        
-        self.controller.app_data["app_1"].set("abc")
-        self.controller.app_data["app_2"].set("abc")
-        self.controller.app_data["app_3"].set("abc")
-        self.controller.app_data["app_4"].set("abc")
-        self.controller.app_data["app_5"].set("abc")
-
-        in_file = self.controller.app_data["in_file"].get()
-        print("reset file name " + in_file)
-
-        if cs.file_reset(in_file) is True:
-            messagebox.showinfo("Succesful Reset", "Settings Reseted!! Please enter new settings before logging out ")
-        else:
-            messagebox.showerror("Reset Fail", "Settings Reset Failed. Please try again")
-# change these function based upon the init of the patients page
     def save_func(self):
         print("in save_func")
-        valp = self.entry_app1.get()
-        print(valp)
-        print(cs.check_empty(self.entry_app1.get()))
-        if cs.check_empty(self.entry_app1.get()) is True:
-            print("fields are empty")
-            messagebox.showerror("Empty Fields", "Please fill all the fields")
-        else:
-   
-            global entry_passwd_var6
-            entry_passwd_var6 = self.entry_password_settingsui.get()
-
-            input_uname = self.controller.app_data["Username"].get()
-            input_pwd = self.controller.app_data["password"].get()
-            speciality_val = self.controller.app_data["speciality"].get()
-            # print(input_pwd)
-
-            if cs.check_empty(entry_passwd_var6) is True:
-                entry_passwd_var6 = input_pwd
-                # print("in check_empty")
-                # print(entry_passwd_var6)
-            else:
-                entry_passwd_var6 = self.entry_password_settingsui.get()
-
-            if cs.check_empty(entry_app_var1) is False and cs.check_empty(entry_app_var2) is False and cs.check_empty(
-                    entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
-                    entry_app_var5) is False:
-                ciphertext_input = cs.encrypt(entry_passwd_var6)
-                created_settings_file = cs.write_settings(input_uname, ciphertext_input, speciality, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5)
-            else:
-                messagebox.showerror("Empty Fields", "Please fill all the fields")
-
-            if cs.file_existence(created_settings_file) is True:
-                self.controller.app_data["app_1"].set(entry_app_var1) 
-                self.controller.app_data["app_2"].set(entry_app_var2)
-                self.controller.app_data["app_3"].set(entry_app_var3)
-                self.controller.app_data["app_4"].set(entry_app_var4)
-                self.controller.app_data["app_5"].set(entry_app_var5)
-                self.controller.app_data["password"].set(entry_passwd_var6)
-                print("settings saved file name   " + created_settings_file)
-                messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
-            else:
-                messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
-# change these function based upon the init of the patients page
-    def reload_app_func(self):
-        varchck = self.entry_app1.get()
-        self.label_uname_display.config(text=self.controller.app_data["Username"].get())
         
-        if cs.check_empty(varchck) is True:
-            self.entry_app1.insert(0, self.controller.app_data["app_1"].get())
-            self.entry_app2.insert(0, self.controller.app_data["app_2"].get())
-            self.entry_app3.insert(0, self.controller.app_data["app_3"].get())
-            self.entry_app4.insert(0, self.controller.app_data["app_4"].get())
-            self.entry_app5.insert(0, self.controller.app_data["app_5"].get())
-# change the entry and lable names to avoid conflicts with the settings one
+
+    def reset_func(self):
+        print("in reset_func")
+
+
+    def reload_app_func(self):
+        print("in reload func")
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -468,6 +341,8 @@ class PatientsForm(tk.Frame):
         self.label_app3 = tk.Label(self, text="Gesture three")
         self.label_app4 = tk.Label(self, text="Gesture four")
         self.label_app5 = tk.Label(self, text="Gesture five")
+        self.label_uname = tk.Label(self, text="Patient Name")
+        self.label_uname_display = tk.Label(self, text="val_uname")
 
         self.entry_app1 = tk.Entry(self)
         self.entry_app2 = tk.Entry(self)
@@ -480,14 +355,14 @@ class PatientsForm(tk.Frame):
         self.label_app3.place(x=30,y=110)
         self.label_app4.place(x=30,y=150)
         self.label_app5.place(x=30,y=190)
+        self.label_uname.place(x=30, y=230)
+        self.label_uname_display.place(x=150, y=230)
 
         self.entry_app1.place(x=120,y=30)
         self.entry_app2.place(x=120,y=70)
         self.entry_app3.place(x=120,y=110)
         self.entry_app4.place(x=120,y=150)
         self.entry_app5.place(x=120,y=190)
-
-      
 
         sel_app1btn = ttk.Button(self, text="Select", command=self.sel_app1_func)
         sel_app1btn.place(x=290,y=30)
@@ -511,8 +386,6 @@ class PatientsForm(tk.Frame):
 
         reload_appbtn = ttk.Button(self, text="Reload", command=self.reload_app_func)
         reload_appbtn.place(x=290,y=230)
-
-
 
 
 class StartApp(tk.Tk):
@@ -543,7 +416,7 @@ class StartApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm, RegisterForm):
+        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm, RegisterForm, PatientsForm):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame

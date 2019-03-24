@@ -8,12 +8,10 @@ uname = ""
 pwd = ""
 
 
-def write_settings(input_name, input_password,speciality, app1, app2, app3, app4, app5):
+def write_patient_settings(input_name, app1, app2, app3, app4, app5):
     """
     writes settings to file in json format
         :param input_name: 
-        :param input_password: 
-        :param speciality:
         :param app1: 
         :param app2: 
         :param app3:
@@ -25,13 +23,35 @@ def write_settings(input_name, input_password,speciality, app1, app2, app3, app4
     data['Settings'] = []
     data['Settings'].append({
         'name': input_name,
-        'password': input_password,
-        'speciality' : speciality,
         'app1': app1,
         'app2': app2,
         'app3': app3,
         'app4': app4,
         'app5': app5,
+    })
+
+    out_fname = input_name+".json" 
+
+    with open(out_fname, 'w') as outfile:
+        json.dump(data, outfile) 
+
+    return out_fname
+
+
+def write_doc_settings(input_name, input_password, speciality):
+    """
+    writes settings to file in json format
+        :param input_name: 
+        :param input_password: 
+        :param speciality:
+        @return string:
+    """
+    data = {}
+    data['Settings'] = []
+    data['Settings'].append({
+        'name': input_name,
+        'password': input_password,
+        'speciality' : speciality,
     })
 
     out_fname = input_name+".json" 
