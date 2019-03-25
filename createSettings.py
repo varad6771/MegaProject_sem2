@@ -16,23 +16,16 @@ def write_patient_settings(input_name, app1, app2, app3, app4, app5, path):
         :param app2: 
         :param app3:
         :param app4:
-        :param app5: 
+        :param app5:
+        :param path:
         @return string:
     """
-    data = {}
-    data['Settings'] = []
-    data['Settings'].append({
-        'name': input_name,
-        'app1': app1,
-        'app2': app2,
-        'app3': app3,
-        'app4': app4,
-        'app5': app5,
-    })
+    data = {'Settings': []}
+    data['Settings'].append({'name': input_name, 'app1': app1, 'app2': app2, 'app3': app3, 'app4': app4, 'app5': app5})
 
-    out_fname = path+"/"+input_name+".json"
+    out_fname = path + "/" + input_name + ".json"
     with open(out_fname, 'w') as outfile:
-        json.dump(data, outfile) 
+        json.dump(data, outfile)
 
     return out_fname
 
@@ -43,20 +36,16 @@ def write_doc_settings(input_name, input_password, speciality, path):
         :param input_name: 
         :param input_password: 
         :param speciality:
+        :param path:
         @return string:
     """
-    data = {}
-    data['Settings'] = []
-    data['Settings'].append({
-        'name': input_name,
-        'password': input_password,
-        'speciality' : speciality,
-    })
+    data = {'Settings': []}
+    data['Settings'].append({'name': input_name, 'password': input_password, 'speciality': speciality})
 
-    out_fname = path+"/"+input_name+".json" 
+    out_fname = path + "/" + input_name + ".json"
     print(out_fname)
     with open(out_fname, 'w') as outfile:
-        json.dump(data, outfile) 
+        json.dump(data, outfile)
 
     return out_fname
 
@@ -66,18 +55,46 @@ def create_dir(input_dname, input_pname, status):
 
     if status is True:
         # print("in if")
-        path = path+"/"+input_dname;
+        path = path + "/" + input_dname
         os.mkdir(path)
     elif status is False:
         # print("in else")
-        path = path+"/"+input_dname+"/"+input_pname
+        path = path + "/" + input_dname + "/" + input_pname
         if not os.path.exists(path):
             os.makedirs(path)
         else:
             print("error")
-    
+
     return path
-    
+
+
+def write_plist_file(var_value, path):
+    print("in write_plist_file")
+    fname = path + "/" + "plist.txt"
+    with open(fname, 'a') as file:
+        file.write(var_value)
+
+    return fname
+
+# TODO to get vals in correct dict/list format
+
+
+def read_plist_file(path):
+    print("in read_plist_file")
+    i = 0
+    fname = path + "/" + "plist.txt"
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    count = i + 1
+    print(count)
+    content = []
+    with open(fname) as file:
+        for i in range(1, count-1):
+            content.append(file.readlines())
+
+    return content
+
 
 def read_settings(in_fname):
     """
@@ -90,6 +107,16 @@ def read_settings(in_fname):
     return input_data
 
 
+def read_help_file():
+    """
+    Reads help content from file "data.txt"
+        @return array:
+    """
+    file_data = open('data.txt', 'r')
+    help_data = file_data.read()  # type: str
+    return help_data
+
+
 def file_existence(in_fname):
     """
     check the existence of file
@@ -98,7 +125,7 @@ def file_existence(in_fname):
     """
     if os.path.isfile(in_fname):
         return True
-    
+
     return False
 
 
@@ -111,18 +138,8 @@ def file_reset(in_fname):
     os.remove(in_fname)
     if file_existence(in_fname):
         return False
-    
+
     return True
-
-
-def read_help_file():
-    """
-    Reads help content from file "data.txt"
-        @return array:
-    """
-    file_data = open('data.txt', 'r')
-    help_data = file_data.read()  # type: str
-    return help_data
 
 
 def encrypt(raw):
@@ -180,11 +197,7 @@ def check_empty(field_val):
 
 
 def get_path():
-    return (os.getcwd())
+    return os.getcwd()
 
 # if __name__ == '__main__':
-#     path = create_doc_dir('varad','pname1',True)
-#     filename = write_doc_settings("varad","abcd","bones",path)
-#     print(file_existence(filename))
-#     file_reset(filename)
-#     print(file_existence(filename))
+#    print(read_plist_file("/home/varadvanjape/Code/Python/Sem_2/MegaProject_sem2/varad"))
