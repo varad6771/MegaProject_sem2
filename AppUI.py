@@ -16,7 +16,7 @@ class LoginForm(tk.Frame):
 
         in_file = input_uname + ".json"
         path = cs.get_path()
-        in_file = in_file = path+"/"+in_file
+        in_file = path+"/"+input_uname+"/"+in_file
         if cs.file_existence(in_file) is False:
             print("file does not exist so login fail")
             messagebox.showerror("Login Fail", "User does not Exist")
@@ -26,7 +26,8 @@ class LoginForm(tk.Frame):
             self.controller.app_data["Username"].set(input_uname)
             self.controller.app_data["in_file"].set(in_file) 
             self.controller.app_data["password"].set(input_pwd)
-            self.controller.app_data["doc_path"].set(path)
+            updated_path_val = path+"/"+input_uname
+            self.controller.app_data["doc_path"].set(updated_path_val)
             
             input_data = cs.read_settings(in_file)
             for data_file in input_data['Settings']:
@@ -91,7 +92,8 @@ class RegisterForm(tk.Frame):
         else:
             in_file = uname_val + ".json"
             ciphertext_input = cs.encrypt(pwd_val)
-            path = cs.get_path()
+            path = cs.create_dir(uname_val,'abc',True)
+            print("path register = ",path)
             in_file = path+"/"+in_file
             if cs.file_existence(in_file) is False:
                 print("file does not exist so write settings")
@@ -248,7 +250,15 @@ class SettingsForm(tk.Frame):
         patientnameval = self.entry_patient_name.get()
         
         if cs.check_empty(patientnameval) is False:
-            self.controller.app_data["patient_name"].set(patientnameval) 
+            doc_uname = self.controller.app_data["Username"].get()
+            patient_dir = cs.create_dir(doc_uname, patientnameval, False)
+            print("patient dir is ",patient_dir)
+            patients_file = cs.write_patient_settings(patientnameval, "abc", "abc", "abc", "abc", "abc", patient_dir)
+            
+            self.controller.app_data["patient_name"].set(patientnameval)
+            self.controller.app_data["patient_path"].set(patient_dir)
+            self.controller.app_data["in_file_p"].set(patients_file)
+            
             self.controller.show_frame("PatientsForm")
         else:
             messagebox.showerror("Empty Field", "Please fill the patients name ")
@@ -302,11 +312,13 @@ class PatientsForm(tk.Frame):
         entry_app_var1 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app1.insert(0, entry_app_var1)
 
+
     def sel_app2_func(self):
         global entry_app_var2
         self.entry_app2.delete(0, tk.END)
         entry_app_var2 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app2.insert(0, entry_app_var2)
+
 
     def sel_app3_func(self):
         global entry_app_var3
@@ -314,11 +326,13 @@ class PatientsForm(tk.Frame):
         entry_app_var3 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app3.insert(0, entry_app_var3)
 
+
     def sel_app4_func(self):
         global entry_app_var4
         self.entry_app4.delete(0, tk.END)
         entry_app_var4 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app4.insert(0, entry_app_var4)
+
 
     def sel_app5_func(self):
         global entry_app_var5
@@ -326,15 +340,77 @@ class PatientsForm(tk.Frame):
         entry_app_var5 = filedialog.askopenfilename(filetypes=[("all file", "*")])
         self.entry_app5.insert(0, entry_app_var5)
 
+
     def save_func(self):
         print("in save_func")
+        valp = self.entry_app1.get()
+        print(valp)
+        print(cs.check_empty(self.entry_app1.get()))
+        if cs.check_empty(self.entry_app1.get()) is True:
+            print("fields are empty")
+            messagebox.showerror("Empty Fields", "Please fill all the fields")
+        else:
+            path = self.controller.app_data["patient_path"].get()
+            patient_name = self.controller.app_data["patient_name"].get()
+            if cs.check_empty(entry_app_var1) is False and cs.check_empty(entry_app_var2) is False and cs.check_empty(
+                    entry_app_var3) is False and cs.check_empty(entry_app_var4) is False and cs.check_empty(
+                    entry_app_var5) is False:
+                patients_setting_file = cs.write_patient_settings(patient_name, entry_app_var1, entry_app_var2, entry_app_var3, entry_app_var4, entry_app_var5, path)
+            else:
+                messagebox.showerror("Empty Fields", "Please fill all the fields")
+
+            if cs.file_existence(patients_setting_file) is True:
+                self.controller.app_data["app_1"].set(entry_app_var1) 
+                self.controller.app_data["app_2"].set(entry_app_var2)
+                self.controller.app_data["app_3"].set(entry_app_var3)
+                self.controller.app_data["app_4"].set(entry_app_var4)
+                self.controller.app_data["app_5"].set(entry_app_var5)
+                
+                print("settings saved file   " + patients_setting_file)
+                messagebox.showinfo("Save Succesful", "New Settings are Updated Successfully ")
+            else:
+                messagebox.showerror("Update Failed", "New Settings are not Updated!! Please try again later")
+
         
     def reset_func(self):
         print("in reset_func")
+        self.entry_app1.delete(0, tk.END)
+        self.entry_app2.delete(0, tk.END)
+        self.entry_app3.delete(0, tk.END)
+        self.entry_app4.delete(0, tk.END)
+        self.entry_app5.delete(0, tk.END)
+
+        self.controller.app_data["app_1"].set("abc")
+        self.controller.app_data["app_2"].set("abc")
+        self.controller.app_data["app_3"].set("abc")
+        self.controller.app_data["app_4"].set("abc")
+        self.controller.app_data["app_5"].set("abc")
+
+        # TODO check if the folder path is taken
+        in_file_patient = self.controller.app_data["in_file_p"].get()
+        print("reset file name " + in_file_patient)
+        
+        if cs.file_reset(in_file_patient) is True:
+            messagebox.showinfo("Succesful Reset", "Settings Reseted!! Please enter new settings before logging out ")
+        else:
+            messagebox.showerror("Reset Fail", "Settings Reset Failed. Please try again")
+
 
     def reload_app_func(self):
-        self.label_patient_name.config(text=self.controller.app_data["patient_name"].get())
         print("in reload func")
+        self.label_patient_name.config(text=self.controller.app_data["patient_name"].get())
+        varchck = self.entry_app1.get()
+
+        in_file_p = self.controller.app_data["in_file_p"].get()
+        input_data = cs.read_settings(in_file_p)
+        for data_file in input_data['Settings']:
+            if cs.check_empty(varchck) is True:
+                self.entry_app1.insert(0, data_file['app1'])
+                self.entry_app2.insert(0, data_file['app2'])
+                self.entry_app3.insert(0, data_file['app3'])
+                self.entry_app4.insert(0, data_file['app4'])
+                self.entry_app5.insert(0, data_file['app5'])
+
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -402,13 +478,14 @@ class StartApp(tk.Tk):
             "password": tk.StringVar(),
             "speciality" :tk.StringVar(),
             "in_file": tk.StringVar(),
+            "doc_path": tk.StringVar(),
             "app_1": tk.StringVar(),
             "app_2": tk.StringVar(),
             "app_3": tk.StringVar(),
             "app_4": tk.StringVar(),
             "app_5": tk.StringVar(),
+            "in_file_p": tk.StringVar(),
             "patient_name": tk.StringVar(),
-            "doc_path": tk.StringVar(),
             "patient_path": tk.StringVar(),
         }
 
