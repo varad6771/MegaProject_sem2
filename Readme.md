@@ -4,9 +4,9 @@ This is the repository for mega project.
 ### TODO 
 - Dynamic motion capture.
 - [Done] [Object Detection API (Static)] select algorithm for image analysis.
-- create a better dataset.
+- [Done] create a better dataset.
 - [Done] create UI for application.
-- Flawless Documentation 
+- [I don't think this will ever get completed :)] Flawless Documentation 
 
 ### Guid Lines
 - Please create a new branch while adding a new feature.

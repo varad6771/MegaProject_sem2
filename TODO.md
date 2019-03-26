@@ -1,12 +1,11 @@
 ## Remaining Tasks
 - ### Main Application
-    - static model implementation
-    - dynamic model implementation
-    - Data set (Dynamic model)
-## Partially Done
-    - Data set (Static model) 
+    - UI styling
 ## Done
 - ### UI
+    - invoke app & counter for invoke (shadab)
+    - Register page & validation
+    - create a exe file of complete project
     - file chooser of selecting exe's
     - loginScreen, settingsScreen, dashboard 
     - User Register and Auth using json file
@@ -14,9 +13,8 @@
     - Recheck all the functions and corner cases
     - Recheck all the var assignments and their passing
     - Encrypt and decrypt val of password before writing to file
-## Status Unknown
-- dynamic model implementation
 ## Issues
 - ### UI
-    - if a user wants to save settings for app pref's, he has to select/reselect all else there will be error even if he wants to change only one pref
-
+    - if a user wants to save settings for app pref's, he has to select/reselect all, (even if he wants to change only one pref) else there will be error " Please check for such corner conditions "
+    - if password is empty it will take it empty, getPwd is not working
+    - if fields are empty at the time of saving(save_func) i.e user has not selected the vals (from file chooser) in that session it gives error (not solvable, atleast easily, needs major change in handling data)
