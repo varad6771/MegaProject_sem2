@@ -174,25 +174,26 @@ class DashboardForm(tk.Frame):
         self.controller.app_data["patient_path"].set(" ")
         self.controller.show_frame("LoginForm")
 
-    def selectp_func(self):
-        global var
-        var = tk.StringVar(self)
-        var.set("Select Patient")
-
+    def select_patient_func(self):
         path = self.controller.app_data["doc_path"].get()
-        # BUG toget the list in dict or list in correct format
-        plist = cs.read_plist_file(path)
-        print(plist)
-        options = ttk.OptionMenu(self, var, *plist)
-        
-        options.place(x=230, y=230)
+        p_data = cs.read_plist_file(path)
 
-    def selectopt_func(self):
-        print("value is", var.get())
-        self.controller.app_data["ch_patient"].set(var.get())
+        patient_text = tk.Text(self)
+        patient_text.insert(tk.END, p_data)
+        # TODO
+        # please adjust this so that user will also be able to see 
+        # entry and button below it (below textarea and other buttons sill visible) 
+        patient_text.place(x=160, y=200)
+        
+        # entry and button placement
+        self.patient_name.place(x=160, y=20)
+        self.modifyviewbtn.place(x=160, y=50)
 
     def modview_func(self):
-        if cs.check_empty(var.get()) is False:
+        patient_name_data = self.patient_name.get()
+        patient_name_data = patient_name_data.split()
+        self.controller.app_data["ch_patient"].set(patient_name_data[0])
+        if cs.check_empty(self.patient_name.get()) is False:
             self.controller.show_frame("ModViewForm")
         else:
             messagebox.showerror("Empty Field", "Please Select a Patient")
@@ -201,11 +202,10 @@ class DashboardForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.selectp_func)
-        select_patientbtn.place(x=160, y=240)
+        self.patient_name = tk.Entry(self)
 
-        selopttbtn = ttk.Button(self, text="Select", command=self.selectopt_func)
-        selopttbtn.place(x=160, y=50)
+        select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
+        select_patientbtn.place(x=160, y=240)
 
         runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
         runappbtn.place(x=160, y=100)
@@ -219,8 +219,7 @@ class DashboardForm(tk.Frame):
         logoutbtn = ttk.Button(self, text="Logout", command=self.logout_func)
         logoutbtn.place(x=160, y=280)
 
-        modifyviewbtn = ttk.Button(self, text="Modify/View Patient", command=self.modview_func)
-        modifyviewbtn.place(x=160, y=340)
+        self.modifyviewbtn = ttk.Button(self, text="Modify/View Patient", command=self.modview_func)
 
 
 class HelpForm(tk.Frame):

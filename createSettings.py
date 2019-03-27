@@ -58,7 +58,6 @@ def create_dir(input_dname, input_pname, status):
         path = path + "/" + input_dname
         os.mkdir(path)
     elif status is False:
-        # print("in else")
         path = path + "/" + input_dname + "/" + input_pname
         if not os.path.exists(path):
             os.makedirs(path)
@@ -76,22 +75,13 @@ def write_plist_file(var_value, path):
 
     return fname
 
-# TODO to get vals in correct dict/list format
-
 
 def read_plist_file(path):
     print("in read_plist_file")
-    i = 0
     fname = path + "/" + "plist.txt"
-    with open(fname) as f:
-        for i, l in enumerate(f):
-            pass
-    count = i + 1
-    print(count)
-    content = []
+
     with open(fname) as file:
-        for i in range(1, count-1):
-            content.append(file.readlines())
+        content = file.read()
 
     return content
 
@@ -198,6 +188,3 @@ def check_empty(field_val):
 
 def get_path():
     return os.getcwd()
-
-# if __name__ == '__main__':
-#    print(read_plist_file("/home/varadvanjape/Code/Python/Sem_2/MegaProject_sem2/varad"))
