@@ -149,13 +149,24 @@ class DashboardForm(tk.Frame):
 
     def runapp_func(self):
         print("In the run app func")
-        app1_dbf = self.controller.app_data["app_1"].get()
-        app2_dbf = self.controller.app_data["app_2"].get()
-        app3_dbf = self.controller.app_data["app_3"].get()
-        app4_dbf = self.controller.app_data["app_4"].get()
-        app5_dbf = self.controller.app_data["app_5"].get()
-        # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
-        # det.detect()
+
+        patient_name_data = self.patient_name.get()
+        patient_name_data = patient_name_data.split()
+        self.controller.app_data["ch_patient"].set(patient_name_data[0])
+
+        p_name = self.controller.app_data["ch_patient"].get()
+        p_path = self.controller.app_data["doc_path"].get()
+        in_file_p = p_path + "/" + p_name + "/" + p_name + ".json"
+
+        input_patient_data = cs.read_settings(in_file_p)
+        for data_file in input_patient_data['Settings']:
+            app1_dbf = data_file['app1']
+            app2_dbf = data_file['app2']
+            app3_dbf = data_file['app3']
+            app4_dbf = data_file['app4']
+            app5_dbf = data_file['app5']
+            det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
+            det.detect()
 
     def logout_func(self):
         print(" in logout function")
@@ -184,15 +195,17 @@ class DashboardForm(tk.Frame):
         # please adjust this so that user will also be able to see 
         # entry and button below it (below textarea and other buttons sill visible) 
         patient_text.place(x=160, y=200)
-        
-        # entry and button placement
+
+        # change entry and button placement accordingly
         self.patient_name.place(x=160, y=20)
         self.modifyviewbtn.place(x=160, y=50)
+        self.runappbtn.place(x=160, y=100)
 
     def modview_func(self):
         patient_name_data = self.patient_name.get()
         patient_name_data = patient_name_data.split()
         self.controller.app_data["ch_patient"].set(patient_name_data[0])
+
         if cs.check_empty(self.patient_name.get()) is False:
             self.controller.show_frame("ModViewForm")
         else:
@@ -207,8 +220,7 @@ class DashboardForm(tk.Frame):
         select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
         select_patientbtn.place(x=160, y=240)
 
-        runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
-        runappbtn.place(x=160, y=100)
+        self.runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
 
         settingsbtn = ttk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
         settingsbtn.place(x=157, y=160)
