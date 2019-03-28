@@ -1,8 +1,9 @@
 import cv2
 import os
-
+import winsound
 import tensorflow as tf
-
+import win32api
+import pyautogui
 from imutils.video import VideoStream
 from utils import detector_utils as detector_utils
 
@@ -27,6 +28,7 @@ def predict(image_data):
             res = human_string
     return res, max_score
 
+
 # TODO (need to test)clicking q key does not work. the app stays in actions_invoke please check control flow
 
 
@@ -42,6 +44,9 @@ def detect():
     global three
     global four
     global five
+    global status
+    global sfive
+    global path
     color = (0, 255, 0)
     label_lines = [line.rstrip() for line
                    in tf.gfile.GFile("output_labels.txt")]
@@ -53,11 +58,14 @@ def detect():
         _ = tf.import_graph_def(graph_def, name='')
 
     detection_graph, sessD = detector_utils.load_inference_graph()
-    fist=0
-    two=0
-    three=0
-    four=0
-    five=0
+    fist = 0
+    two = 0
+    three = 0
+    four = 0
+    five = 0
+    sfive = 0
+    status = 'command'
+    path = ''
     with tf.Session() as sess:
         score_thresh = 0.60
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
@@ -70,6 +78,10 @@ def detect():
         im_height, im_width = (None, None)
         try:
             while True:
+                if cv2.waitKey(25) & 0xFF == ord('q'):
+                    cv2.destroyAllWindows()
+                    vs.stop()
+                    break
                 # Read Frame and process
                 frame = vs.read()
                 frame = cv2.flip(frame, 1)
@@ -88,101 +100,171 @@ def detect():
                 boxes, scores, classes = detector_utils.detect_objects(
                     frame, detection_graph, sessD)
 
-                if scores[0] > score_thresh:
-                    (left, right, top, bottom) = (boxes[0][1] * im_width, boxes[0][3] * im_width,
-                                                  boxes[0][0] * im_height, boxes[0][2] * im_height)
-                    height = bottom - top
-                    width = right - left
-                    img_cropped = frame[int(top):int(top + height), int(left):int(left + width)]
-                    img_cropped = cv2.cvtColor(img_cropped, cv2.COLOR_RGB2BGR)
-                    image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()
+                for i in range(num_hands_detect):
+                    if scores[i] > score_thresh:
+                        (left, right, top, bottom) = (boxes[i][1] * im_width, boxes[i][3] * im_width,
+                                                      boxes[i][0] * im_height, boxes[i][2] * im_height)
+                        height = bottom - top
+                        width = right - left
+                        img_cropped = frame[int(top):int(top + height), int(left):int(left + width)]
+                        img_cropped = cv2.cvtColor(img_cropped, cv2.COLOR_RGB2BGR)
+                        image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()
 
-                    res, score = predict(image_data)
-                    cv2.putText(frame, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
-                    cv2.putText(frame, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
-                    #print(res)
-                    #print("score of label ", score)
+                        res, score = predict(image_data)
+                        cv2.putText(frame, '%s' % (res.upper()), (100, 400), cv2.FONT_HERSHEY_SIMPLEX, 2,
+                                    (255, 255, 255), 4)
+                        # (frame,text,co-ordinates,fontype,font size,fontcolor,font boldness)
+                        cv2.putText(frame, '(score = %.5f)' % (float(score)), (100, 450), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                    (255, 255, 255), 1)
 
-                    actions_invoke(res, score)        
-                    
-                    cv2.putText(frame, res, (int(left), int(top) - 5),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                        if classes[i] == 1: hlabel = 'open'
+                        if classes[i] == 2: hlabel = 'close'
+                        cv2.putText(frame, hlabel + str("{0:.2f}".format(scores[i])), (int(left), int(top) - 5),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                        if status == 'command':
+                            actions_invoke(res, score)
+                        else:
+                            actions_perform(hlabel, path, left * 1.5, top * 1.5, width * 1.5, height * 1.5, res, score)
+                        # Draw bounding boxes and text
+                        detector_utils.draw_box_on_image(
+                            num_hands_detect, score_thresh, scores, boxes, classes, im_width, im_height, frame)
 
-                    cv2.putText(frame, 'Accuracy: ' + str("{0:.2f}".format(score)),
-                                (int(left), int(top) - 20),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    cv2.imshow('Detection', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
-                # Draw bounding boxeses and text
-                detector_utils.draw_box_on_image(
-                    num_hands_detect, score_thresh, scores, boxes, classes, im_width, im_height, frame)
-
-                cv2.imshow('Detection', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-
-                if cv2.waitKey(25) & 0xFF == ord('q'):
-                    cv2.destroyAllWindows()
-                    vs.stop()
-                    break
         except KeyboardInterrupt:
             pass  # print("Average FPS: ", str("{0:.2f}".format(fps)))
 
 
 def actions_invoke(res, score):
-    global fist,two,three,four,five
-    if score >= 0.6 and res == "fist": 
-        fist=fist+1
-        two=0
-        three=0
-        four=0
-        five=0        
+    frequency = 2500  # Set Frequency To 2500 Hertz
+    duration = 1000
+    global fist, two, three, four, five, status, path
+    if score >= 0.6 and res == "fist":
+        fist = fist + 1
+        two = 0
+        three = 0
+        four = 0
+        five = 0
         print("{} fist".format(fist))
-        if(fist==3):
+        if fist == 3:
+            status = 'normal'
+            path = app_pref1
             print("{} Invoked".format(app_pref1))
+            winsound.Beep(frequency, duration)
+            print("In normal mode")
             os.startfile(app_pref1)
-            fist=0
+            fist = 0
     elif score >= 0.6 and res == "two":
-        two=two+1
-        fist=0
-        three=0
-        four=0
-        five=0
+        two = two + 1
+        fist = 0
+        three = 0
+        four = 0
+        five = 0
         print("{} two".format(two))
-        if(two==3):
+        if two == 3:
+            status = 'normal'
+            path = app_pref2
             print("{} invoked".format(app_pref2))
+            winsound.Beep(frequency, duration)
+            print("In normal mode")
             os.startfile(app_pref2)
-            two=0
+            two = 0
     elif score >= 0.6 and res == "three":
-        three=three+1
-        fist=0
-        two=0
-        four=0
-        five=0
+        three = three + 1
+        fist = 0
+        two = 0
+        four = 0
+        five = 0
         print("{} three".format(three))
-        if(three==3):
+        if three == 3:
+            status = 'normal'
+            path = app_pref3
             print("{} invoked".format(app_pref3))
+            winsound.Beep(frequency, duration)
+            print("In normal mode")
             os.startfile(app_pref3)
-            three=0
+            three = 0
     elif score >= 0.6 and res == "four":
-        four=four+1
-        fist=0
-        two=0
-        three=0
-        five=0
+        four = four + 1
+        fist = 0
+        two = 0
+        three = 0
+        five = 0
         print("{} four".format(four))
-        if(four==3):
+        if four == 3:
+            status = 'normal'
+            path = app_pref4
             print("{} invoked".format(app_pref4))
+            winsound.Beep(frequency, duration)
+            print("In normal mode")
             os.startfile(app_pref4)
-            four=0
+            four = 0
     elif score >= 0.6 and res == "five":
-        five=five+1
-        fist=0
-        two=0
-        three=0
-        four=0
+        five = five + 1
+        fist = 0
+        two = 0
+        three = 0
+        four = 0
         print("{} five".format(five))
-        if(five==3):
+        if five == 3:
+            status = 'normal'
+            path = app_pref5
             print("{} invoked".format(app_pref5))
+            winsound.Beep(frequency, duration)
+            print("In normal mode")
             os.startfile(app_pref5)
-            five=0
+            five = 0
+
+
+def actions_perform(hlabel, path, left, top, width, height, res, score):
+    frequency = 2500  # Set Frequency To 2500 Hertz
+    duration = 1000  # Set Duration To 1000 ms == 1 second
+    global status, sfive
+    if score >= 0.6 and res == "two":
+        winsound.Beep(frequency, duration)
+        status = 'command'
+        print("In command mode")
+    elif path.endswith('mp4'):
+        if res == 'five':
+            sfive = sfive + 1
+            if sfive == 2:
+                pyautogui.press('space')
+                sfive = 0
+        elif hlabel == 'open':
+            pyautogui.keyDown('fn')
+            pyautogui.press('volumeup')
+            pyautogui.press('volumeup')
+            pyautogui.press('volumeup')
+            pyautogui.press('volumeup')
+            pyautogui.press('volumeup')
+            pyautogui.keyUp('fn')
+        if hlabel == 'close':
+            pyautogui.keyDown('fn')
+            pyautogui.press('volumedown')
+            pyautogui.press('volumedown')
+            pyautogui.press('volumedown')
+            pyautogui.press('volumedown')
+            pyautogui.press('volumedown')
+            pyautogui.keyUp('fn')
+    elif path.endswith('png') or path.endswith('jpg'):
+        if hlabel == 'open':
+            pyautogui.keyDown('ctrl')
+            pyautogui.press('+')
+            pyautogui.keyUp('ctrl')
+        if hlabel == 'close':
+            pyautogui.keyDown('ctrl')
+            pyautogui.press('-')
+            pyautogui.keyUp('ctrl')
+    elif path.endswith('pdf'):
+        if hlabel == 'open':
+            pyautogui.press('pgup')
+        if hlabel == 'close':
+            pyautogui.press('pgdn')
+    else:
+        win32api.SetCursorPos((int(left + width // 2), int(top + height // 2)))
+        if hlabel == 'open' and res != two:
+            pyautogui.click(int(left + width // 2), int(top + height // 2))
+            pyautogui.click(int(left + width // 2), int(top + height // 2))
 
 
 def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
@@ -196,9 +278,7 @@ def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
 
 
 def get_res_score():
-    return res,score
+    return res, score
 
 # if __name__ == '__main__':
-#     detect()
-#     predict()
-
+#    detect()
