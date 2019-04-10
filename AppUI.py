@@ -1,3 +1,4 @@
+#line no 231, 236, 242 check and realign (if necessasry) for 205  
 import tkinter as tk
 import createSettings as cs
 #import detection as det
@@ -152,22 +153,24 @@ class DashboardForm(tk.Frame):
         print("In the run app func")
 
         patient_name_data = self.patient_name.get()
-        patient_name_data = patient_name_data.split()
-        self.controller.app_data["ch_patient"].set(patient_name_data[0])
-
-        p_name = self.controller.app_data["ch_patient"].get()
-        p_path = self.controller.app_data["doc_path"].get()
-        in_file_p = p_path + "/" + p_name + "/" + p_name + ".json"
-
-        input_patient_data = cs.read_settings(in_file_p)
-        for data_file in input_patient_data['Settings']:
-            app1_dbf = data_file['app1']
-            app2_dbf = data_file['app2']
-            app3_dbf = data_file['app3']
-            app4_dbf = data_file['app4']
-            app5_dbf = data_file['app5']
-            # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
-            # det.detect()
+        # patient_name_data = patient_name_data.split()
+        # self.controller.app_data["ch_patient"].set(patient_name_data[0])
+        if cs.check_empty(patient_name_data) == True:
+            messagebox.showerror("Patient not selected", "Please select the patient")
+        else :
+            p_name = patient_name_data
+            p_path = self.controller.app_data["doc_path"].get()
+            in_file_p = p_path + "/" + p_name + "/" + p_name + ".json"
+            # print(in_file_p)
+            input_patient_data = cs.read_settings(in_file_p)
+            for data_file in input_patient_data['Settings']:
+                app1_dbf = data_file['app1']
+                app2_dbf = data_file['app2']
+                app3_dbf = data_file['app3']
+                app4_dbf = data_file['app4']
+                app5_dbf = data_file['app5']
+                # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
+                # det.detect()
 
     def logout_func(self):
         print(" in logout function")
@@ -199,11 +202,10 @@ class DashboardForm(tk.Frame):
             patient_text.insert(tk.END, p_data)
             patient_text.place(x=300, y=40,height=100,width=100)
 
+            self.patientlist_title.place(x=300, y=20)
             self.patient_name.place(x=100, y=40)
             self.modifyviewbtn.place(x=100, y=100)
             self.runappbtn.place(x=100, y=160)
-
-        
 
     def modview_func(self):
         patient_name_data = self.patient_name.get()
@@ -221,21 +223,23 @@ class DashboardForm(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
+        self.patientlist_title = ttk.Label(self, text="Available Patients")
+
         self.patient_name = tk.Entry(self)
 
         self.select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
-        self.select_patientbtn.place(x=100, y=240)
+        self.select_patientbtn.place(x=50, y=240)
 
         self.runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
 
         settingsbtn = ttk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
-        settingsbtn.place(x=100, y=300)
+        settingsbtn.place(x=160, y=240)
 
-        helpbtn = ttk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
-        helpbtn.place(x=300, y=240)
+        # helpbtn = ttk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
+        # helpbtn.place(x=300, y=240)
 
         logoutbtn = ttk.Button(self, text="Logout", command=self.logout_func)
-        logoutbtn.place(x=300, y=300)
+        logoutbtn.place(x=270, y=240)
 
         self.modifyviewbtn = ttk.Button(self, text="Modify/View Patient", command=self.modview_func)
 
@@ -723,7 +727,7 @@ class StartApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginForm, DashboardForm, SettingsForm, HelpForm, RegisterForm, PatientsForm, ModViewForm):
+        for F in (LoginForm, DashboardForm, SettingsForm, RegisterForm, PatientsForm, ModViewForm):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
