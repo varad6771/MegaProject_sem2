@@ -1,6 +1,6 @@
 import tkinter as tk
 import createSettings as cs
-import detection as det
+#import detection as det
 
 from tkinter import messagebox
 from tkinter import filedialog
@@ -53,13 +53,14 @@ class LoginForm(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.controller = controller
-
+        self.label_title = ttk.Label(self, text="Doctor Assistant", font='Helvetica 18 bold')
         self.label_username = ttk.Label(self, text="Username")
         self.label_password = ttk.Label(self, text="Password")
 
         self.entry_username = tk.Entry(self)
         self.entry_password = tk.Entry(self, show="*")
 
+        self.label_title.place(x=150, y=50)
         self.label_username.place(x=100, y=120)
         self.label_password.place(x=100, y=170)
         self.entry_username.place(x=180, y=120)
@@ -165,8 +166,8 @@ class DashboardForm(tk.Frame):
             app3_dbf = data_file['app3']
             app4_dbf = data_file['app4']
             app5_dbf = data_file['app5']
-            det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
-            det.detect()
+            # det.get_user_prefs(app1_dbf, app2_dbf, app3_dbf, app4_dbf, app5_dbf)
+            # det.detect()
 
     def logout_func(self):
         print(" in logout function")
@@ -187,26 +188,31 @@ class DashboardForm(tk.Frame):
 
     def select_patient_func(self):
         path = self.controller.app_data["doc_path"].get()
-        p_data = cs.read_plist_file(path)
+        
+        fname = path + "/" + "plist.txt"
+        
+        if cs.file_existence(fname) == False:
+            messagebox.showerror("Patient List Empty", "Please add the patient")
+        else :
+            p_data = cs.read_plist_file(path)
+            patient_text = tk.Text(self)
+            patient_text.insert(tk.END, p_data)
+            patient_text.place(x=300, y=40,height=100,width=100)
 
-        patient_text = tk.Text(self)
-        patient_text.insert(tk.END, p_data)
-        # TODO
-        # please adjust this so that user will also be able to see 
-        # entry and button below it (below textarea and other buttons sill visible) 
-        patient_text.place(x=300, y=40,height=100,width=100)
+            self.patient_name.place(x=100, y=40)
+            self.modifyviewbtn.place(x=100, y=100)
+            self.runappbtn.place(x=100, y=160)
 
-        # change entry and button placement accordingly
-        self.patient_name.place(x=100, y=40)
-        self.modifyviewbtn.place(x=100, y=100)
-        self.runappbtn.place(x=100, y=160)
+        
 
     def modview_func(self):
         patient_name_data = self.patient_name.get()
         patient_name_data = patient_name_data.split()
-        self.controller.app_data["ch_patient"].set(patient_name_data[0])
+        
+        patient_modview = self.patient_name.get()
+        self.controller.app_data["ch_patient"].set(patient_modview)
 
-        if cs.check_empty(self.patient_name.get()) is False:
+        if cs.check_empty(patient_modview) is False:
             self.controller.show_frame("ModViewForm")
         else:
             messagebox.showerror("Empty Field", "Please Select a Patient")
@@ -217,8 +223,8 @@ class DashboardForm(tk.Frame):
 
         self.patient_name = tk.Entry(self)
 
-        select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
-        select_patientbtn.place(x=100, y=240)
+        self.select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
+        self.select_patientbtn.place(x=100, y=240)
 
         self.runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
 
@@ -491,6 +497,8 @@ class SettingsForm(tk.Frame):
                 self.controller.app_data["patient_name"].set(patientnameval)
                 self.controller.app_data["patient_path"].set(patient_dir)
                 self.controller.app_data["in_file_p"].set(patients_file)
+
+                self.entry_patient_name.delete(0, tk.END)
                 self.controller.show_frame("PatientsForm")
             else:
                 print("patient name not added to list")
@@ -737,6 +745,6 @@ class StartApp(tk.Tk):
 
 if __name__ == "__main__":
     app = StartApp()
-    app.title("Hand Gesture Recognition")
+    app.title("Doctor Assistant")
     app.geometry('500x500')
     app.mainloop()

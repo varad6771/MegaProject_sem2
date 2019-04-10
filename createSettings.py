@@ -72,7 +72,7 @@ def write_plist_file(var_value, path):
     fname = path + "/" + "plist.txt"
     with open(fname, 'a') as file:
         file.write(var_value)
-
+    
     return fname
 
 
@@ -82,7 +82,7 @@ def read_plist_file(path):
 
     with open(fname) as file:
         content = file.read()
-
+    
     return content
 
 
