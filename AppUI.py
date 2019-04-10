@@ -194,12 +194,12 @@ class DashboardForm(tk.Frame):
         # TODO
         # please adjust this so that user will also be able to see 
         # entry and button below it (below textarea and other buttons sill visible) 
-        patient_text.place(x=160, y=200)
+        patient_text.place(x=300, y=40,height=100,width=100)
 
         # change entry and button placement accordingly
-        self.patient_name.place(x=160, y=20)
-        self.modifyviewbtn.place(x=160, y=50)
-        self.runappbtn.place(x=160, y=100)
+        self.patient_name.place(x=100, y=40)
+        self.modifyviewbtn.place(x=100, y=100)
+        self.runappbtn.place(x=100, y=160)
 
     def modview_func(self):
         patient_name_data = self.patient_name.get()
@@ -218,18 +218,18 @@ class DashboardForm(tk.Frame):
         self.patient_name = tk.Entry(self)
 
         select_patientbtn = ttk.Button(self, text="Choose Patient", command=self.select_patient_func)
-        select_patientbtn.place(x=160, y=240)
+        select_patientbtn.place(x=100, y=240)
 
         self.runappbtn = ttk.Button(self, text="Run app", command=self.runapp_func)
 
         settingsbtn = ttk.Button(self, text="Settings Page", command=lambda: controller.show_frame("SettingsForm"))
-        settingsbtn.place(x=157, y=160)
+        settingsbtn.place(x=100, y=300)
 
         helpbtn = ttk.Button(self, text="Help Page", command=lambda: controller.show_frame("HelpForm"))
-        helpbtn.place(x=160, y=220)
+        helpbtn.place(x=300, y=240)
 
         logoutbtn = ttk.Button(self, text="Logout", command=self.logout_func)
-        logoutbtn.place(x=160, y=280)
+        logoutbtn.place(x=300, y=300)
 
         self.modifyviewbtn = ttk.Button(self, text="Modify/View Patient", command=self.modview_func)
 
@@ -511,31 +511,31 @@ class SettingsForm(tk.Frame):
         self.entry_patient_name = tk.Entry(self)
         self.entry_password_settingsui = tk.Entry(self, show="*")
 
-        self.label_patient_name.place(x=30, y=30)
-        self.label_uname.place(x=30, y=230)
-        self.label_uname_display.place(x=150, y=230)
-        self.label_speciality_settingsui.place(x=30, y=270)
-        self.label_password_settingsui.place(x=30, y=300)
+        self.label_patient_name.place(x=80, y=130)
+        self.label_uname.place(x=80, y=200)
+        self.label_uname_display.place(x=170, y=200)
+        self.label_speciality_settingsui.place(x=80, y=250)
+        self.label_password_settingsui.place(x=80, y=300)
 
-        self.entry_patient_name.place(x=120, y=30)
-        self.entry_speciality_settingsui.place(x=120, y=270)
-        self.entry_password_settingsui.place(x=120, y=300)
+        self.entry_patient_name.place(x=170, y=130)
+        self.entry_speciality_settingsui.place(x=170, y=250)
+        self.entry_password_settingsui.place(x=170, y=300)
 
         addpatientbtn = ttk.Button(self, text="Add Patient", command=self.addpatient_func)
-        addpatientbtn.place(x=70, y=90)
+        addpatientbtn.place(x=320, y=130)
 
         resetbtn = ttk.Button(self, text="Reset", command=self.reset_func)
-        resetbtn.place(x=70, y=330)
+        resetbtn.place(x=80, y=360)
 
         # changes in savefunc
         savebtn = ttk.Button(self, text="Save", command=self.save_func)
-        savebtn.place(x=170, y=330)
+        savebtn.place(x=180, y=360)
 
         backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.place(x=270, y=330)
+        backbtn.place(x=280, y=360)
 
         reload_appbtn = ttk.Button(self, text="Reload", command=self.reload_app_func)
-        reload_appbtn.place(x=290, y=230)
+        reload_appbtn.place(x=320, y=250)
 
 
 class PatientsForm(tk.Frame):
