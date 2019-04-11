@@ -155,8 +155,14 @@ class DashboardForm(tk.Frame):
         patient_name_data = self.patient_name.get()
         # patient_name_data = patient_name_data.split()
         # self.controller.app_data["ch_patient"].set(patient_name_data[0])
+        path = self.controller.app_data["doc_path"].get()
+        filename_patient = path + "/" + patient_name_data + "/" + patient_name_data + ".json" 
+        print(filename_patient)
+        
         if cs.check_empty(patient_name_data) == True:
             messagebox.showerror("Patient not selected", "Please select the patient")
+        elif cs.file_existence(filename_patient):
+            messagebox.showerror("Not a valid Patient", "Please select valid patient")
         else :
             p_name = patient_name_data
             p_path = self.controller.app_data["doc_path"].get()
@@ -193,9 +199,11 @@ class DashboardForm(tk.Frame):
         path = self.controller.app_data["doc_path"].get()
         
         fname = path + "/" + "plist.txt"
-        
+         
+
         if cs.file_existence(fname) == False:
             messagebox.showerror("Patient List Empty", "Please add the patient")
+        
         else :
             p_data = cs.read_plist_file(path)
             patient_text = tk.Text(self)
@@ -214,7 +222,13 @@ class DashboardForm(tk.Frame):
         patient_modview = self.patient_name.get()
         self.controller.app_data["ch_patient"].set(patient_modview)
 
-        if cs.check_empty(patient_modview) is False:
+        path = self.controller.app_data["doc_path"].get()
+        filename_patient = path + "/" + patient_name_data + "/" + patient_name_data + ".json" 
+        print(filename_patient)
+        
+        if cs.file_existence(filename_patient):
+            messagebox.showerror("Not a valid Patient", "Please select valid patient")
+        elif cs.check_empty(patient_modview) is False:
             self.controller.show_frame("ModViewForm")
         else:
             messagebox.showerror("Empty Field", "Please Select a Patient")
