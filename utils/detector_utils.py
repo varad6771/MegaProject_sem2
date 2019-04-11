@@ -18,7 +18,7 @@ PATH_TO_CKPT = TRAINED_MODEL_DIR + '/ssd5_optimized_inference_graph.pb'
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = TRAINED_MODEL_DIR + '/hand_label_map.pbtxt'
 
-NUM_CLASSES = 1
+NUM_CLASSES = 2
 # load label map using utils provided by tensorflow object detection api
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(
@@ -44,12 +44,7 @@ def load_inference_graph():
 
 # Drawing bounding boxes and distances onto image
 def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, classes, im_width, im_height, image_np):
-    # Determined using a piece of paper of known length, code can be found in distance to camera
-   # focalLength = 875
-    # The average width of a human hand (inches) http://www.theaveragebody.com/average_hand_size.php
-    # added an inch since thumb is not included
-   # avg_width = 4.0
-    # To more easily differetiate distances and detected bboxes
+    
     global p1
     global p2
     color = (0,255,0)

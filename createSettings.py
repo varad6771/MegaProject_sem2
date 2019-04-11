@@ -8,38 +8,83 @@ uname = ""
 pwd = ""
 
 
-def write_settings(input_name, input_password, fullname, app1, app2, app3, app4, app5):
+def write_patient_settings(input_name, app1, app2, app3, app4, app5, path):
     """
     writes settings to file in json format
         :param input_name: 
-        :param input_password: 
-        :param fullname:
         :param app1: 
         :param app2: 
         :param app3:
         :param app4:
-        :param app5: 
+        :param app5:
+        :param path:
         @return string:
     """
-    data = {}
-    data['Settings'] = []
-    data['Settings'].append({
-        'name': input_name,
-        'password': input_password,
-        'fullname': fullname,
-        'app1': app1,
-        'app2': app2,
-        'app3': app3,
-        'app4': app4,
-        'app5': app5,
-    })
+    data = {'Settings': []}
+    data['Settings'].append({'name': input_name, 'app1': app1, 'app2': app2, 'app3': app3, 'app4': app4, 'app5': app5})
 
-    out_fname = input_name+".json" 
-
+    out_fname = path + "/" + input_name + ".json"
     with open(out_fname, 'w') as outfile:
-        json.dump(data, outfile) 
+        json.dump(data, outfile)
 
     return out_fname
+
+
+def write_doc_settings(input_name, input_password, speciality, path):
+    """
+    writes settings to file in json format
+        :param input_name: 
+        :param input_password: 
+        :param speciality:
+        :param path:
+        @return string:
+    """
+    data = {'Settings': []}
+    data['Settings'].append({'name': input_name, 'password': input_password, 'speciality': speciality})
+
+    out_fname = path + "/" + input_name + ".json"
+    print(out_fname)
+    with open(out_fname, 'w') as outfile:
+        json.dump(data, outfile)
+
+    return out_fname
+
+
+def create_dir(input_dname, input_pname, status):
+    path = os.getcwd()
+
+    if status is True:
+        # print("in if")
+        path = path + "/" + input_dname
+        os.mkdir(path)
+    elif status is False:
+        path = path + "/" + input_dname + "/" + input_pname
+        if not os.path.exists(path):
+            os.makedirs(path)
+        else:
+            print("error")
+
+    return path
+
+
+def write_plist_file(var_value, path):
+    print("in write_plist_file")
+    fname = path + "/" + "plist.txt"
+    # file.write("{}\n".format(var_value))
+    with open(fname, 'a') as file:
+        file.write(var_value + '\n')
+    
+    return fname
+
+
+def read_plist_file(path):
+    print("in read_plist_file")
+    fname = path + "/" + "plist.txt"
+
+    with open(fname) as file:
+        content = file.read()
+    
+    return content
 
 
 def read_settings(in_fname):
@@ -53,6 +98,16 @@ def read_settings(in_fname):
     return input_data
 
 
+def read_help_file():
+    """
+    Reads help content from file "data.txt"
+        @return array:
+    """
+    file_data = open('data.txt', 'r')
+    help_data = file_data.read()  # type: str
+    return help_data
+
+
 def file_existence(in_fname):
     """
     check the existence of file
@@ -61,7 +116,7 @@ def file_existence(in_fname):
     """
     if os.path.isfile(in_fname):
         return True
-    
+
     return False
 
 
@@ -74,18 +129,8 @@ def file_reset(in_fname):
     os.remove(in_fname)
     if file_existence(in_fname):
         return False
-    
+
     return True
-
-
-def read_help_file():
-    """
-    Reads help content from file "data.txt"
-        @return array:
-    """
-    file_data = open('data.txt', 'r')
-    help_data = file_data.read()  # type: str
-    return help_data
 
 
 def encrypt(raw):
@@ -140,3 +185,7 @@ def check_empty(field_val):
         return True
 
     return False
+
+
+def get_path():
+    return os.getcwd()
