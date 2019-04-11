@@ -192,6 +192,7 @@ class DashboardForm(tk.Frame):
         self.controller.app_data["in_file_p"].set(" ")
         self.controller.app_data["patient_name"].set(" ")
         self.controller.app_data["patient_path"].set(" ")
+        self.patient_text.delete('1.0', tk.END)
         self.controller.show_frame("LoginForm")
 
     def select_patient_func(self):
@@ -205,9 +206,9 @@ class DashboardForm(tk.Frame):
         
         else :
             p_data = cs.read_plist_file(path)
-            patient_text = tk.Text(self)
-            patient_text.insert(tk.END, p_data)
-            patient_text.place(x=300, y=40,height=100,width=100)
+            self.patient_text = tk.Text(self)
+            self.patient_text.insert(tk.END, p_data)
+            self.patient_text.place(x=300, y=40,height=130,width=130)
 
             self.patientlist_title.place(x=300, y=20)
             self.patient_name.place(x=100, y=40)
@@ -494,7 +495,13 @@ class SettingsForm(tk.Frame):
 
     def reload_app_func(self):
         self.label_uname_display.config(text=self.controller.app_data["Username"].get())
-        self.entry_speciality_settingsui.insert(0, self.controller.app_data["speciality"].get())
+        
+        varchck = self.entry_speciality_settingsui.get() 
+        if cs.check_empty(varchck) is True:
+            self.entry_speciality_settingsui.insert(0, self.controller.app_data["speciality"].get())
+        else :
+            self.entry_speciality_settingsui.delete(0, tk.END)
+            self.entry_speciality_settingsui.insert(0, self.controller.app_data["speciality"].get())
 
     def addpatient_func(self):
         print("in add patient")
