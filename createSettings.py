@@ -70,8 +70,9 @@ def create_dir(input_dname, input_pname, status):
 def write_plist_file(var_value, path):
     print("in write_plist_file")
     fname = path + "/" + "plist.txt"
+    # file.write("{}\n".format(var_value))
     with open(fname, 'a') as file:
-        file.write(var_value)
+        file.write(var_value + '\n')
     
     return fname
 
