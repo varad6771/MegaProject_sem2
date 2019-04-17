@@ -11,9 +11,9 @@ pwd = ""
 def write_patient_settings(input_name, app1, app2, app3, app4, app5, path):
     """
     writes settings to file in json format
-        :param input_name: 
-        :param app1: 
-        :param app2: 
+        :param input_name:
+        :param app1:
+        :param app2:
         :param app3:
         :param app4:
         :param app5:
@@ -33,8 +33,8 @@ def write_patient_settings(input_name, app1, app2, app3, app4, app5, path):
 def write_doc_settings(input_name, input_password, speciality, path):
     """
     writes settings to file in json format
-        :param input_name: 
-        :param input_password: 
+        :param input_name:
+        :param input_password:
         :param speciality:
         :param path:
         @return string:
@@ -51,6 +51,13 @@ def write_doc_settings(input_name, input_password, speciality, path):
 
 
 def create_dir(input_dname, input_pname, status):
+    """
+    create directories nested or otherwise based on "status"
+        :param input_dname:
+        :param input_pname:
+        :param status:
+        @return string:
+    """
     path = os.getcwd()
 
     if status is True:
@@ -68,29 +75,39 @@ def create_dir(input_dname, input_pname, status):
 
 
 def write_plist_file(var_value, path):
+    """
+    write patients name to plist.txt
+        :param var_value:
+        :param path:
+        @return string:
+    """
     print("in write_plist_file")
     fname = path + "/" + "plist.txt"
-    # file.write("{}\n".format(var_value))
     with open(fname, 'a') as file:
         file.write(var_value + '\n')
-    
+
     return fname
 
 
 def read_plist_file(path):
+    """
+    read the plist.txt file and return content
+        :param path:
+        @return string:
+    """
     print("in read_plist_file")
     fname = path + "/" + "plist.txt"
 
     with open(fname) as file:
         content = file.read()
-    
+
     return content
 
 
 def read_settings(in_fname):
     """
     writes settings to file in json format
-        :param in_fname: 
+        :param in_fname:
         @return array:
     """
     with open(in_fname, 'r') as json_file:
@@ -98,20 +115,10 @@ def read_settings(in_fname):
     return input_data
 
 
-def read_help_file():
-    """
-    Reads help content from file "data.txt"
-        @return array:
-    """
-    file_data = open('data.txt', 'r')
-    help_data = file_data.read()  # type: str
-    return help_data
-
-
 def file_existence(in_fname):
     """
     check the existence of file
-        :param in_fname: 
+        :param in_fname:
         @return boolean:
     """
     if os.path.isfile(in_fname):
@@ -124,7 +131,7 @@ def file_reset(in_fname):
     """
     remove (reset) the file from path
         :param in_fname:
-        @return boolean: 
+        @return boolean:
     """
     os.remove(in_fname)
     if file_existence(in_fname):
@@ -137,7 +144,7 @@ def encrypt(raw):
     """
     encrypt the password
         :param raw:
-        @return hash: 
+        @return hash:
     """
     pwd_context = CryptContext(
         schemes=["pbkdf2_sha256"],
@@ -150,8 +157,8 @@ def encrypt(raw):
 def check_pswd(red_pwd, inp_pwd):
     """
     check passwords
-        :param red_pwd: 
-        :param inp_pwd: 
+        :param red_pwd:
+        :param inp_pwd:
         @return boolean:
     """
     pwd_context = CryptContext(
@@ -165,7 +172,7 @@ def check_pswd(red_pwd, inp_pwd):
 def check_unm(red_unm, inp_unm):
     """
     check uname
-        :param red_unm: 
+        :param red_unm:
         :param inp_unm:
         @return boolean:
     """
@@ -188,4 +195,8 @@ def check_empty(field_val):
 
 
 def get_path():
+    """
+    return present working directory
+        @return boolean:
+    """
     return os.getcwd()

@@ -1,4 +1,3 @@
-#line no 231, 236, 242 check and realign (if necessasry) for 205
 import tkinter as tk
 import createSettings as cs
 #import detection as det
@@ -255,21 +254,6 @@ class DashboardForm(tk.Frame):
         logoutbtn.place(x=270, y=240)
 
         self.modifyviewbtn = ttk.Button(self, text="Modify/View Patient", command=self.modview_func)
-
-
-class HelpForm(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-
-        backbtn = ttk.Button(self, text="Back", command=lambda: controller.show_frame("DashboardForm"))
-        backbtn.grid()
-
-        help_data = cs.read_help_file()
-        text = tk.Text(self)
-        text.insert(tk.END, help_data)
-        text.grid(row=2, column=0)
 
 
 class ModViewForm(tk.Frame):

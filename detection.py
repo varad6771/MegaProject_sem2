@@ -4,6 +4,7 @@ import winsound
 import tensorflow as tf
 import win32api
 import pyautogui
+
 from imutils.video import VideoStream
 from utils import detector_utils as detector_utils
 
@@ -27,8 +28,6 @@ def predict(image_data):
             max_score = score
             res = human_string
     return res, max_score
-
-# TODO (need to test)clicking q key does not work. the app stays in actions_invoke please check control flow
 
 
 def detect():
@@ -213,6 +212,7 @@ def actions_invoke(res, score):
             os.startfile(app_pref5)
             five=0
 
+
 def actions_perform(hlabel,path,res,score):
     frequency = 2500  # Set Frequency To 2500 Hertz
     duration = 1000  # Set Duration To 1000 ms == 1 second
@@ -261,6 +261,7 @@ def actions_perform(hlabel,path,res,score):
         if(hlabel=='close'):
             pyautogui.press('pgdn')
 
+
 def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
     print("in get_user_prefs")
     global app_pref1, app_pref2, app_pref3, app_pref4, app_pref5
@@ -269,10 +270,3 @@ def get_user_prefs(pref1, pref2, pref3, pref4, pref5):
     app_pref3 = pref3
     app_pref4 = pref4
     app_pref5 = pref5
-
-
-def get_res_score():
-    return res,score
-
-#if __name__ == '__main__':
-#    detect()
