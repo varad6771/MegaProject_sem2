@@ -1,4 +1,4 @@
-#line no 231, 236, 242 check and realign (if necessasry) for 205  
+#line no 231, 236, 242 check and realign (if necessasry) for 205
 import tkinter as tk
 import createSettings as cs
 #import detection as det
@@ -156,8 +156,8 @@ class DashboardForm(tk.Frame):
         # patient_name_data = patient_name_data.split()
         # self.controller.app_data["ch_patient"].set(patient_name_data[0])
         path = self.controller.app_data["doc_path"].get()
-        filename_patient = path + "/" + patient_name_data + "/" + patient_name_data + ".json" 
-        
+        filename_patient = path + "/" + patient_name_data + "/" + patient_name_data + ".json"
+
         if cs.check_empty(patient_name_data) is True:
             messagebox.showerror("Patient not selected", "Please select the patient")
         elif cs.file_existence(filename_patient) is False:
@@ -197,19 +197,18 @@ class DashboardForm(tk.Frame):
 
     def select_patient_func(self):
         path = self.controller.app_data["doc_path"].get()
-        
+
         fname = path + "/" + "plist.txt"
-         
+
 
         if cs.file_existence(fname) == False:
             messagebox.showerror("Patient List Empty", "Please add the patient")
-        
+
         else :
             p_data = cs.read_plist_file(path)
             self.patient_text = tk.Text(self)
             self.patient_text.insert(tk.END, p_data)
             self.patient_text.place(x=300, y=40,height=130,width=130)
-
             self.patientlist_title.place(x=300, y=20)
             self.patient_name.place(x=100, y=40)
             self.modifyviewbtn.place(x=100, y=100)
@@ -218,14 +217,14 @@ class DashboardForm(tk.Frame):
     def modview_func(self):
         # patient_name_data = self.patient_name.get()
         # patient_name_data = patient_name_data.split()
-        
+
         patient_modview = self.patient_name.get()
         self.controller.app_data["ch_patient"].set(patient_modview)
 
         path = self.controller.app_data["doc_path"].get()
-        filename_patient = path + "/" + patient_modview + "/" + patient_modview + ".json" 
+        filename_patient = path + "/" + patient_modview + "/" + patient_modview + ".json"
         print(filename_patient)
-        
+
         if cs.file_existence(filename_patient) is False:
             messagebox.showerror("Not a valid Patient", "Please select valid patient")
         elif cs.check_empty(patient_modview) is False:
@@ -495,8 +494,8 @@ class SettingsForm(tk.Frame):
 
     def reload_app_func(self):
         self.label_uname_display.config(text=self.controller.app_data["Username"].get())
-        
-        varchck = self.entry_speciality_settingsui.get() 
+
+        varchck = self.entry_speciality_settingsui.get()
         if cs.check_empty(varchck) is True:
             self.entry_speciality_settingsui.insert(0, self.controller.app_data["speciality"].get())
         else :
